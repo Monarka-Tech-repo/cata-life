@@ -1,0 +1,19 @@
+{
+  "applinks": {
+    "details": [
+      {
+        "appIDs": ["K2A2G2PM7R.com.cata.app"],
+        "components": [
+          {
+            "/": "/join-table",
+            "comment": "Opens a CATA dining-table invitation in the installed iOS app."
+          },
+          {
+            "/": "/join-table/",
+            "comment": "Canonical trailing-slash form of a CATA dining-table invitation."
+          }
+        ]
+      }
+    ]
+  }
+}

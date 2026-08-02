@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { Fraunces, Plus_Jakarta_Sans, Caveat } from "next/font/google";
 import "./globals.css";
 import { siteConfig } from "@/lib/site";
+import { AuthProvider } from "@/hooks/use-auth";
+import { SiteHeader } from "@/components/site-header";
 
 const fraunces = Fraunces({
   variable: "--font-fraunces",
@@ -41,7 +43,12 @@ export default function RootLayout({
       lang="es"
       className={`${fraunces.variable} ${plusJakarta.variable} ${caveat.variable}`}
     >
-      <body className="flex min-h-screen flex-col antialiased">{children}</body>
+      <body className="flex min-h-screen flex-col antialiased">
+        <AuthProvider>
+          <SiteHeader />
+          {children}
+        </AuthProvider>
+      </body>
     </html>
   );
 }
