@@ -1,0 +1,136 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+
+@custom-variant dark (&:is(.dark *));
+
+/*
+  Single theme for the whole site — this project *is* CATA, so the
+  terracotta/parchment/Fraunces identity (matching the real app at
+  D:\CATA\CATA_App\src\theme\index.js) is baked in directly as :root
+  rather than switched via a data-theme attribute like on monarka.tech.
+*/
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-body);
+  --font-mono: var(--font-jetbrains-mono);
+  --font-heading: var(--font-heading);
+  --font-hand: var(--font-hand);
+  --color-sidebar-ring: var(--ring);
+  --color-sidebar-border: var(--border);
+  --color-sidebar-accent-foreground: var(--accent-foreground);
+  --color-sidebar-accent: var(--accent);
+  --color-sidebar-primary-foreground: var(--primary-foreground);
+  --color-sidebar-primary: var(--primary);
+  --color-sidebar-foreground: var(--foreground);
+  --color-sidebar: var(--card);
+  --color-chart-1: var(--accent);
+  --color-chart-2: var(--brand-accent-2);
+  --color-chart-3: var(--brand-teal);
+  --color-chart-4: var(--brand-gold);
+  --color-chart-5: var(--brand-green);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--card-foreground);
+  --color-popover: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+
+  --color-brand-accent-2: var(--brand-accent-2);
+  --color-brand-gold: var(--brand-gold);
+  --color-brand-teal: var(--brand-teal);
+  --color-brand-rare: var(--brand-rare);
+  --color-brand-red: var(--brand-red);
+  --color-brand-green: var(--brand-green);
+  --color-brand-dim: var(--brand-dim);
+  --color-surface-1: var(--surface-1);
+  --color-surface-2: var(--surface-2);
+  --color-surface-3: var(--surface-3);
+  --color-border-2: var(--border-2);
+
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+  --radius-2xl: calc(var(--radius) * 1.8);
+  --radius-3xl: calc(var(--radius) * 2.2);
+  --radius-4xl: calc(var(--radius) * 2.6);
+}
+
+:root {
+  --background: #f2ede8;
+  --foreground: #1a1a18;
+  --card: #ffffff;
+  --card-foreground: #1a1a18;
+  --border: #e0d8d0;
+  --border-2: #cbbfb2;
+  --input: #e0d8d0;
+  --ring: #b8442a;
+  --primary: #b8442a;
+  --primary-foreground: #ffffff;
+  --secondary: #f0ebe3;
+  --secondary-foreground: #1a1a18;
+  --muted: #f0ebe3;
+  --muted-foreground: #a09080;
+  --accent: #b8442a;
+  --accent-foreground: #ffffff;
+  --destructive: #8c3220;
+  --destructive-foreground: #ffffff;
+
+  --brand-accent-2: #ef9f27;
+  --brand-gold: #ef9f27;
+  --brand-teal: #6b8f7a;
+  --brand-rare: #7a6a9a;
+  --brand-red: #8c3220;
+  --brand-green: #6b8f5a;
+  --brand-dim: #cbbfb2;
+  --surface-1: #ffffff;
+  --surface-2: #f0ebe3;
+  --surface-3: #e8e0d6;
+
+  --font-body: var(--font-plus-jakarta);
+  --font-heading: var(--font-fraunces);
+  --font-hand: var(--font-caveat);
+  --radius: 1.1rem;
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+  html {
+    @apply font-sans scroll-smooth;
+  }
+  h1,
+  h2,
+  h3,
+  h4 {
+    @apply font-heading;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
