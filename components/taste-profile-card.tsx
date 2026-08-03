@@ -30,7 +30,15 @@ function titleCase(str: string) {
   return str.charAt(0).toUpperCase() + str.slice(1);
 }
 
-export function TasteProfileCard({ dishes, vesselSize = 128 }: { dishes: Dish[]; vesselSize?: number }) {
+export function TasteProfileCard({
+  dishes,
+  vesselSize = 128,
+  bordered = true,
+}: {
+  dishes: Dish[];
+  vesselSize?: number;
+  bordered?: boolean;
+}) {
   const [mode, setMode] = useState<Mode>("type");
 
   const segments =
@@ -64,7 +72,11 @@ export function TasteProfileCard({ dishes, vesselSize = 128 }: { dishes: Dish[];
       </div>
 
       {segments.length > 0 ? (
-        <div className="mt-6 flex flex-col items-center gap-6 rounded-2xl border border-border-2 bg-card p-6 sm:flex-row">
+        <div
+          className={`mt-6 flex flex-col items-center gap-6 sm:flex-row ${
+            bordered ? "rounded-2xl border border-border-2 bg-card p-6" : ""
+          }`}
+        >
           <TasteVessel segments={segments} size={vesselSize} />
           <div className="flex-1 space-y-3">
             {segments.map((seg) => (
