@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { TasteVessel } from "@/components/taste-vessel";
 import { fetchAllRecommendations, fetchGlobalFlavorTags } from "@/lib/community-service";
+import { fetchPlaceRatings, type PlaceRating } from "@/lib/place-ratings-service";
 import { PROFILE_COLORS, type ProfileSegment } from "@/lib/taste-profile";
 
 const FLAVOR_LABEL_ES: Record<string, string> = {
@@ -15,11 +16,13 @@ const FLAVOR_LABEL_ES: Record<string, string> = {
   Smoky: "Ahumado",
 };
 
+type TopRestaurant = { name: string; count: number; placeId: string | null };
+
 type State =
   | { status: "loading" }
   | { status: "error" }
   | { status: "empty" }
-  | { status: "ready"; segments: ProfileSegment[]; participants: number; topRestaurants: { name: string; count: number }[] };
+  | { status: "ready"; segments: ProfileSegment[]; participants: number; topRestaurants: TopRestaurant[] };
 
 function titleCase(str: string) {
   return FLAVOR_LABEL_ES[str] || str;
@@ -27,6 +30,7 @@ function titleCase(str: string) {
 
 export function CommunityStats() {
   const [state, setState] = useState<State>({ status: "loading" });
+  const [ratings, setRatings] = useState<Map<string, PlaceRating>>(new Map());
 
   useEffect(() => {
     let cancelled = false;
@@ -46,13 +50,17 @@ export function CommunityStats() {
           .sort((a, b) => b.count - a.count)
           .map((seg, i) => ({ ...seg, color: PROFILE_COLORS[i % PROFILE_COLORS.length] }));
 
-        const restaurantCounts = new Map<string, number>();
+        const restaurantCounts = new Map<string, { count: number; placeId: string | null }>();
         recommendations.forEach((r) => {
           if (!r.restaurantName) return;
-          restaurantCounts.set(r.restaurantName, (restaurantCounts.get(r.restaurantName) || 0) + 1);
+          const existing = restaurantCounts.get(r.restaurantName);
+          restaurantCounts.set(r.restaurantName, {
+            count: (existing?.count || 0) + 1,
+            placeId: existing?.placeId ?? r.placeId,
+          });
         });
-        const topRestaurants = [...restaurantCounts.entries()]
-          .map(([name, count]) => ({ name, count }))
+        const topRestaurants: TopRestaurant[] = [...restaurantCounts.entries()]
+          .map(([name, v]) => ({ name, count: v.count, placeId: v.placeId }))
           .sort((a, b) => b.count - a.count)
           .slice(0, 8);
 
@@ -65,6 +73,22 @@ export function CommunityStats() {
       cancelled = true;
     };
   }, []);
+
+  // Real Google ratings are a nice-to-have enrichment fetched separately —
+  // if the Maps API key isn't configured, this silently fails and the list
+  // still renders with just the community recommendation counts.
+  useEffect(() => {
+    if (state.status !== "ready") return;
+    const placeIds = state.topRestaurants.map((r) => r.placeId).filter((id): id is string => !!id);
+    if (placeIds.length === 0) return;
+    let cancelled = false;
+    void fetchPlaceRatings(placeIds).then((map) => {
+      if (!cancelled) setRatings(map);
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, [state]);
 
   if (state.status === "loading") {
     return (
@@ -113,17 +137,33 @@ export function CommunityStats() {
         <div className="mt-8">
           <h3 className="text-sm font-semibold uppercase tracking-widest text-accent">Restaurantes más recomendados</h3>
           <ul className="mt-3 space-y-2">
-            {state.topRestaurants.map((r) => (
-              <li
-                key={r.name}
-                className="flex items-center justify-between rounded-xl border border-border-2 bg-card px-4 py-3 text-sm"
-              >
-                <span className="truncate font-medium">{r.name}</span>
-                <span className="ml-3 shrink-0 text-xs font-semibold text-muted-foreground">
-                  {r.count} {r.count === 1 ? "recomendación" : "recomendaciones"}
-                </span>
-              </li>
-            ))}
+            {state.topRestaurants.map((r) => {
+              const rating = r.placeId ? ratings.get(r.placeId) : undefined;
+              return (
+                <li key={r.name} className="rounded-xl border border-border-2 bg-card px-4 py-3 text-sm">
+                  <div className="flex items-center justify-between">
+                    <span className="truncate font-medium">{r.name}</span>
+                    <span className="ml-3 shrink-0 text-xs font-semibold text-muted-foreground">
+                      {r.count} {r.count === 1 ? "recomendación" : "recomendaciones"}
+                    </span>
+                  </div>
+                  {rating?.rating != null && (
+                    <p className="mt-1 text-xs text-muted-foreground">
+                      ★ {rating.rating.toFixed(1)} en Google
+                      {rating.userRatingCount != null && ` · ${rating.userRatingCount} reseñas`}
+                      {rating.googleMapsURI && (
+                        <>
+                          {" · "}
+                          <a href={rating.googleMapsURI} target="_blank" rel="noopener noreferrer" className="underline underline-offset-2">
+                            Ver en Google Maps
+                          </a>
+                        </>
+                      )}
+                    </p>
+                  )}
+                </li>
+              );
+            })}
           </ul>
         </div>
       )}
