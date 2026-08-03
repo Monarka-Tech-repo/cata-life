@@ -8,6 +8,15 @@ import type { Dish } from "@/lib/types";
 
 const TOP_CITY_COUNT = 8;
 
+// The mobile app derives `city` from splitting a Google formatted address by
+// comma, which sometimes yields a street/plaza fragment instead of a real
+// city name (e.g. "48-red", "Av Gral Álvaro Obregón s/n-Local 33"). Keep
+// those out of the suggested pills — a real city name doesn't contain
+// digits or slashes and isn't unusually long.
+function looksLikeCityName(city: string): boolean {
+  return !/[\d/]/.test(city) && city.length <= 24;
+}
+
 type State = { status: "loading" } | { status: "error" } | { status: "ready"; dishes: Dish[] };
 
 export function GlobalTasteExplorer() {
@@ -34,7 +43,7 @@ export function GlobalTasteExplorer() {
     if (state.status !== "ready") return [];
     const counts = new Map<string, number>();
     state.dishes.forEach((d) => {
-      if (!d.city) return;
+      if (!d.city || !looksLikeCityName(d.city)) return;
       counts.set(d.city, (counts.get(d.city) || 0) + 1);
     });
     return [...counts.entries()]
