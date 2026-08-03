@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { TasteProfileCard } from "@/components/taste-profile-card";
+import { getOrCreateSessionUser } from "@/lib/anonymous-auth";
 import { fetchGlobalDishSample } from "@/lib/dishes-service";
 import type { Dish } from "@/lib/types";
 
@@ -16,7 +17,8 @@ export function GlobalTasteExplorer() {
 
   useEffect(() => {
     let cancelled = false;
-    void fetchGlobalDishSample()
+    void getOrCreateSessionUser()
+      .then(() => fetchGlobalDishSample())
       .then((dishes) => {
         if (!cancelled) setState({ status: "ready", dishes });
       })
