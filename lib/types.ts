@@ -20,6 +20,7 @@ export type Dish = {
   id: string;
   userId: string;
   name: string;
+  city: string | null;
   category: string | null;
   restaurantCuisine: string | null;
   restaurantName: string | null;
