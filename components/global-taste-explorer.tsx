@@ -88,7 +88,7 @@ export function GlobalTasteExplorer() {
             type="text"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            placeholder="Ej. Tucson"
+            placeholder="Ej. Chicago o Nueva York"
             className="mt-2 min-h-13 w-full rounded-xl border border-border-2 bg-background/95 px-4 text-base outline-none transition placeholder:text-muted-foreground/70 focus:border-accent focus:ring-2 focus:ring-accent/20"
           />
           <p className="mt-3 text-xs text-muted-foreground">
