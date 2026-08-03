@@ -10,6 +10,7 @@ import { signOutUser } from "@/lib/auth-service";
 const navLinks = [
   { href: "/taste", label: "Mi Perfil de Gustos" },
   { href: "/planner", label: "Planificador" },
+  { href: "/comunidad", label: "Comunidad" },
 ];
 
 export function SiteHeader() {

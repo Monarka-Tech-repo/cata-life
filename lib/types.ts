@@ -57,6 +57,18 @@ export type TasteQuizResponse = {
   createdAt: unknown;
 };
 
+export type TasteQuizPublicEntry = {
+  flavorTags: string[];
+  createdAt: unknown;
+};
+
+export type RestaurantRecommendation = {
+  id: string;
+  restaurantName: string;
+  placeId: string | null;
+  createdAt: unknown;
+};
+
 export type FoodJourneyList = {
   id: string;
   userId: string;

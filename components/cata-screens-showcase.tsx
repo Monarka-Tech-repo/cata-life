@@ -18,6 +18,20 @@ const screens = [
   "WhatsApp Image 2026-07-21 at 1.28.35 AM.jpeg",
 ].map((name) => `/assets/screens/${encodeURIComponent(name)}`);
 
+const captions = [
+  ["Descubre tu perfil de gustos", "Convierte cada registro en una visión clara de lo que te encanta."],
+  ["Guarda lo que vale la pena", "Crea un diario visual de platillos, bebidas y lugares."],
+  ["Recuerda cada experiencia", "Fotos, notas y calificaciones siempre a la mano."],
+  ["Crea y comparte recetas", "Lleva la inspiración de la mesa a tu propia cocina."],
+  ["Explora nuevas ideas", "Encuentra experiencias construidas alrededor de tu gusto."],
+  ["Construye tu historia", "Cada comida se convierte en parte de tu colección."],
+  ["Comparte con tu gente", "Descubre qué están probando las personas en las que confías."],
+  ["Planea tu próxima salida", "Guarda restaurantes, recetas y viajes gastronómicos."],
+  ["Conoce mejor tu paladar", "Tus hábitos se transforman en recomendaciones más personales."],
+  ["Celebra cada hallazgo", "Haz visibles los platillos y lugares que recomendarías."],
+  ["Todo tu mundo gastronómico", "Una sola app para descubrir, guardar y compartir."],
+];
+
 export function CataScreensShowcase() {
   const [index, setIndex] = useState(0);
 
@@ -71,6 +85,10 @@ export function CataScreensShowcase() {
             }`}
           />
         ))}
+      </div>
+      <div className="mt-5 min-h-16 text-center" aria-live="polite">
+        <p className="font-heading text-lg font-semibold">{captions[index][0]}</p>
+        <p className="mx-auto mt-1 max-w-xs text-xs leading-5 text-muted-foreground">{captions[index][1]}</p>
       </div>
     </div>
   );

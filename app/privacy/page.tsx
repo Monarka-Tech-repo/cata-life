@@ -67,6 +67,7 @@ const sections: Section[] = [
         list: [
           "Planificador de Viajes: si guardas un viaje sin haber iniciado sesión, te pedimos tu correo electrónico para poder guardarlo y avisarte sobre él",
           "Cuestionario de Gustos: tus restaurantes favoritos, tus preferencias de sabor y, si lo proporcionas, tu correo electrónico. Usamos estas respuestas, junto con las de otros usuarios, para construir un perfil de gustos general que usaremos en el futuro para recomendarte viajes gastronómicos personalizados",
+          'Página de Comunidad: tus preferencias de sabor (sin tu correo ni ninguna otra información personal) se suman a estadísticas agregadas y públicas de la comunidad. Si respondes "¿Qué restaurante recomendarías ahora mismo?" o agregas restaurantes favoritos en el Cuestionario de Gustos, el nombre del restaurante se muestra públicamente en esta página como una recomendación de la comunidad — nunca se muestra tu identidad junto con él',
         ],
       },
     ],
