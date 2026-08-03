@@ -78,7 +78,7 @@ export function GlobalTasteExplorer() {
 
       <div className="relative min-h-[420px] overflow-hidden rounded-2xl border border-border-2">
         <WorldMapBackground />
-        <div className="absolute inset-0 bg-background/55" aria-hidden="true" />
+        <div className="absolute inset-0 bg-background/20" aria-hidden="true" />
         <div className="relative z-10 p-6">
           <label htmlFor="global-city-search" className="block text-sm font-semibold">
             Busca una ciudad
