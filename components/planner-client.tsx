@@ -56,14 +56,6 @@ export function PlannerClient() {
     setView({ name: "detail", journey, journeys });
   }
 
-  if (view.name === "loading" || !user) {
-    return (
-      <div className="flex justify-center py-16" role="status">
-        <div className="h-10 w-10 animate-spin rounded-full border-4 border-border border-t-accent" />
-      </div>
-    );
-  }
-
   if (view.name === "error") {
     return (
       <div role="alert" className="rounded-2xl bg-destructive/10 p-6 text-center text-sm text-destructive">
@@ -74,6 +66,14 @@ export function PlannerClient() {
           cata.support@monarka.tech
         </a>
         .
+      </div>
+    );
+  }
+
+  if (view.name === "loading" || !user) {
+    return (
+      <div className="flex justify-center py-16" role="status">
+        <div className="h-10 w-10 animate-spin rounded-full border-4 border-border border-t-accent" />
       </div>
     );
   }

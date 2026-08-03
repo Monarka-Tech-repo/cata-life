@@ -29,8 +29,8 @@ export default function HomePage() {
           <Image
             src="/assets/cata/cata-logo.png"
             alt="CATA Dining Journal"
-            width={140}
-            height={140}
+            width={400}
+            height={200}
             priority
             className="mx-auto h-auto w-32 md:mx-0 md:w-36"
           />
