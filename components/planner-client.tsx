@@ -1,12 +1,12 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import type { User } from "firebase/auth";
 import { useRouter } from "next/navigation";
 import { JourneyCreateForm } from "@/components/journey-create-form";
 import { JourneyDetail } from "@/components/journey-detail";
 import { JourneyList } from "@/components/journey-list";
-import { RequireAuth } from "@/components/require-auth";
-import { useAuth } from "@/hooks/use-auth";
+import { getOrCreateSessionUser } from "@/lib/anonymous-auth";
 import { fetchJourneyById, fetchUserJourneys } from "@/lib/journeys-service";
 import type { FoodJourneyList } from "@/lib/types";
 
@@ -17,18 +17,21 @@ type View =
   | { name: "create"; journeys: FoodJourneyList[] }
   | { name: "detail"; journey: FoodJourneyList; journeys: FoodJourneyList[] };
 
-function Inner() {
-  const { user } = useAuth();
+export function PlannerClient() {
   const router = useRouter();
+  const [user, setUser] = useState<User | null>(null);
   const [view, setView] = useState<View>({ name: "loading" });
 
+  // No login wall — anyone gets a session (their own real account if
+  // already signed in, otherwise a silent anonymous one, same trick /join-table uses).
   useEffect(() => {
-    if (!user) return;
     let cancelled = false;
-    void Promise.resolve()
-      .then(async () => {
+    void getOrCreateSessionUser()
+      .then(async (sessionUser) => {
+        if (cancelled) return;
+        setUser(sessionUser);
         const tripId = new URLSearchParams(window.location.search).get("trip");
-        const journeys = await fetchUserJourneys(user.uid);
+        const journeys = await fetchUserJourneys(sessionUser.uid);
         if (cancelled) return;
         if (tripId) {
           const journey = journeys.find((j) => j.id === tripId) ?? (await fetchJourneyById(tripId));
@@ -46,14 +49,14 @@ function Inner() {
     return () => {
       cancelled = true;
     };
-  }, [user]);
+  }, []);
 
   function openJourney(journey: FoodJourneyList, journeys: FoodJourneyList[]) {
     router.push(`/planner?trip=${journey.id}`);
     setView({ name: "detail", journey, journeys });
   }
 
-  if (view.name === "loading") {
+  if (view.name === "loading" || !user) {
     return (
       <div className="flex justify-center py-16" role="status">
         <div className="h-10 w-10 animate-spin rounded-full border-4 border-border border-t-accent" />
@@ -78,6 +81,7 @@ function Inner() {
   if (view.name === "create") {
     return (
       <JourneyCreateForm
+        user={user}
         onCancel={() => {
           router.push("/planner");
           setView({ name: "list", journeys: view.journeys });
@@ -113,13 +117,5 @@ function Inner() {
       }}
       onNew={() => setView({ name: "create", journeys: view.journeys })}
     />
-  );
-}
-
-export function PlannerClient() {
-  return (
-    <RequireAuth>
-      <Inner />
-    </RequireAuth>
   );
 }

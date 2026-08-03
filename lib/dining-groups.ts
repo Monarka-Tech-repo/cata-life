@@ -1,6 +1,6 @@
-import { signInAnonymously } from "firebase/auth";
 import { arrayUnion, doc, getDoc, updateDoc } from "firebase/firestore";
 import { getFirebaseServices } from "@/lib/firebase";
+import { getOrCreateSessionUser } from "@/lib/anonymous-auth";
 
 export type DiningGroupMember = {
   name: string;
@@ -61,18 +61,10 @@ function parseMembers(value: unknown): DiningGroupMember[] {
   });
 }
 
-async function authenticatedUser() {
-  const { auth } = getFirebaseServices();
-  if (auth.currentUser) return auth.currentUser;
-
-  const credential = await signInAnonymously(auth);
-  return credential.user;
-}
-
 export async function loadDiningGroup(tableId: string): Promise<DiningGroupInvite> {
   try {
     const { db } = getFirebaseServices();
-    const user = await authenticatedUser();
+    const user = await getOrCreateSessionUser();
     const snapshot = await getDoc(doc(db, "diningGroups", tableId));
 
     if (!snapshot.exists()) throw new DiningGroupError("unavailable");

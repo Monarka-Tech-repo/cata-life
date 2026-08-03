@@ -44,6 +44,19 @@ export type RestaurantEntry = {
   recommendedDishes: unknown[];
 };
 
+export type WebLead = {
+  email: string;
+  source: "planner" | "quiz";
+  createdAt: unknown;
+};
+
+export type TasteQuizResponse = {
+  favoriteRestaurants: { placeId: string; name: string }[];
+  flavorTags: string[];
+  email: string | null;
+  createdAt: unknown;
+};
+
 export type FoodJourneyList = {
   id: string;
   userId: string;

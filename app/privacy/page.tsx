@@ -59,6 +59,16 @@ const sections: Section[] = [
           "Token de notificaciones push, vinculado a tu cuenta, usado únicamente para enviarte notificaciones dentro de la app",
         ],
       },
+      {
+        h3: "Herramientas en cata.life que no requieren cuenta",
+        paragraphs: [
+          'Puedes usar el Planificador de Viajes y el Cuestionario de Gustos en nuestro sitio web sin crear una cuenta de CATA. Para que estas herramientas funcionen, creamos una sesión anónima de acceso — no recopilamos tu nombre ni identidad a menos que la proporciones directamente.',
+        ],
+        list: [
+          "Planificador de Viajes: si guardas un viaje sin haber iniciado sesión, te pedimos tu correo electrónico para poder guardarlo y avisarte sobre él",
+          "Cuestionario de Gustos: tus restaurantes favoritos, tus preferencias de sabor y, si lo proporcionas, tu correo electrónico. Usamos estas respuestas, junto con las de otros usuarios, para construir un perfil de gustos general que usaremos en el futuro para recomendarte viajes gastronómicos personalizados",
+        ],
+      },
     ],
   },
   {
@@ -70,6 +80,7 @@ const sections: Section[] = [
       "Buscar restaurantes y platillos cerca de ti",
       "Enviar notificaciones dentro de la app sobre actividad relacionada con tu contenido",
       "Mejorar la app a partir de patrones de uso agregados",
+      "Guardar y notificarte sobre viajes creados en el Planificador sin cuenta, y desarrollar futuras recomendaciones personalizadas a partir de las respuestas del Cuestionario de Gustos",
       "Cumplir con obligaciones legales aplicables",
     ],
     paragraphs: [

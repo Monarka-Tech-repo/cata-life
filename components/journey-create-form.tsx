@@ -1,15 +1,24 @@
 "use client";
 
 import { FormEvent, useState } from "react";
+import type { User } from "firebase/auth";
 import { RestaurantPicker } from "@/components/restaurant-picker";
-import { useAuth } from "@/hooks/use-auth";
 import { createJourney } from "@/lib/journeys-service";
+import { saveLead } from "@/lib/leads-service";
 import type { RestaurantEntry } from "@/lib/types";
 
-export function JourneyCreateForm({ onCreated, onCancel }: { onCreated: (id: string) => void; onCancel: () => void }) {
-  const { user } = useAuth();
+export function JourneyCreateForm({
+  user,
+  onCreated,
+  onCancel,
+}: {
+  user: User;
+  onCreated: (id: string) => void;
+  onCancel: () => void;
+}) {
   const [title, setTitle] = useState("");
   const [city, setCity] = useState("");
+  const [email, setEmail] = useState("");
   const [restaurants, setRestaurants] = useState<RestaurantEntry[]>([]);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -22,9 +31,11 @@ export function JourneyCreateForm({ onCreated, onCancel }: { onCreated: (id: str
     setRestaurants((prev) => prev.filter((r) => r.placeId !== placeId));
   }
 
+  const needsEmail = !user.email;
+
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    if (!user || submitting || !title.trim()) return;
+    if (submitting || !title.trim() || (needsEmail && !email.trim())) return;
     setSubmitting(true);
     setError(null);
     try {
@@ -39,6 +50,9 @@ export function JourneyCreateForm({ onCreated, onCancel }: { onCreated: (id: str
         lng: first?.lng ?? null,
         restaurants,
       });
+      if (needsEmail) {
+        await saveLead(email, "planner").catch(() => {});
+      }
       onCreated(id);
     } catch {
       setError("No pudimos crear tu viaje. Intenta de nuevo.");
@@ -76,6 +90,23 @@ export function JourneyCreateForm({ onCreated, onCancel }: { onCreated: (id: str
         />
       </div>
 
+      {needsEmail && (
+        <div>
+          <label htmlFor="journey-email" className="block text-sm font-semibold">
+            Correo electrónico
+          </label>
+          <input
+            id="journey-email"
+            type="email"
+            required
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            placeholder="Para guardar y avisarte sobre tu viaje"
+            className="mt-2 min-h-13 w-full rounded-xl border border-border-2 bg-background px-4 text-base outline-none transition placeholder:text-muted-foreground/70 focus:border-accent focus:ring-2 focus:ring-accent/20"
+          />
+        </div>
+      )}
+
       <RestaurantPicker onSelect={handleSelectRestaurant} />
 
       {restaurants.length > 0 && (
@@ -104,7 +135,7 @@ export function JourneyCreateForm({ onCreated, onCancel }: { onCreated: (id: str
       <div className="flex gap-3">
         <button
           type="submit"
-          disabled={submitting || !title.trim()}
+          disabled={submitting || !title.trim() || (needsEmail && !email.trim())}
           className="flex min-h-13 flex-1 items-center justify-center rounded-full bg-foreground px-6 font-semibold text-background transition hover:bg-accent disabled:cursor-not-allowed disabled:opacity-50"
         >
           {submitting ? "Creando…" : "Crear viaje"}
