@@ -190,7 +190,8 @@ export default function HomePage() {
           </div>
           <div className="flex gap-6 text-sm">
             <Link href="/privacy" className="text-muted-foreground transition hover:text-accent">Política de Privacidad</Link>
-            <a href="mailto:cata.support@monarka.tech" className="text-muted-foreground transition hover:text-accent">Contacto</a>
+            <Link href="/terms" className="text-muted-foreground transition hover:text-accent">Términos de Servicio</Link>
+            <Link href="/support" className="text-muted-foreground transition hover:text-accent">Soporte</Link>
           </div>
         </div>
       </footer>

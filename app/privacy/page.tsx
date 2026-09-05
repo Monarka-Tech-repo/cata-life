@@ -20,7 +20,7 @@ const sections: Section[] = [
   {
     title: "1. Introducción",
     paragraphs: [
-      `Monarka TECH ("nosotros", "nuestro") desarrolla CATA, un diario gastronómico social para registrar platillos, descubrir restaurantes y compartir experiencias con otros usuarios. Esta Política de Privacidad explica qué información recopilamos a través de la app CATA (iOS y Android) y de este sitio web, cómo la usamos y qué derechos tienes sobre ella.`,
+      `MONARKA TECH LLC ("nosotros", "nuestro") desarrolla CATA, un diario gastronómico social para registrar platillos, descubrir restaurantes y compartir experiencias con otros usuarios. Esta Política de Privacidad explica qué información recopilamos a través de la app CATA (iOS y Android) y de este sitio web, cómo la usamos y qué derechos tienes sobre ella.`,
       "Al usar CATA aceptas las prácticas descritas en esta política. Si no estás de acuerdo, te pedimos que no utilices la app.",
     ],
   },
@@ -148,7 +148,7 @@ const sections: Section[] = [
     title: "11. Contacto",
     paragraphs: ["Si tienes preguntas sobre esta Política de Privacidad, contáctanos:"],
     list: [
-      "Empresa: Monarka TECH",
+      "Empresa: MONARKA TECH LLC",
       "Correo: cata.support@monarka.tech",
       "Sitio web: cata.life",
     ],
