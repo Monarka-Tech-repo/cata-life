@@ -87,13 +87,19 @@ const sections: Section[] = [
     ],
   },
   {
-    title: "11. Cambios a estos Términos",
+    title: "11. Ley aplicable y jurisdicción",
+    paragraphs: [
+      "Estos Términos se rigen por las leyes del Estado de Arizona, Estados Unidos, sin dar efecto a sus disposiciones sobre conflicto de leyes. Cualquier disputa relacionada con estos Términos o con el uso de CATA se someterá a la jurisdicción exclusiva de los tribunales estatales o federales ubicados en Arizona.",
+    ],
+  },
+  {
+    title: "12. Cambios a estos Términos",
     paragraphs: [
       "Podemos actualizar estos Términos periódicamente. Notificaremos cambios importantes actualizando la fecha al inicio de esta página. El uso continuado de CATA después de un cambio implica la aceptación de los Términos actualizados.",
     ],
   },
   {
-    title: "12. Contacto",
+    title: "13. Contacto",
     paragraphs: ["Si tienes preguntas sobre estos Términos de Servicio, contáctanos:"],
     list: [
       "Empresa: MONARKA TECH LLC",
