@@ -3,29 +3,33 @@
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import { AnimatePresence, motion } from "framer-motion";
+import { useI18n } from "@/components/locale-provider";
+import type { ShowcaseSlideKey } from "@/lib/i18n/types";
 
-// Files live in public/assets/screens/. Each entry keeps the image and its caption together.
-const slides = [
-  ["WhatsApp Image 2026-10-21 at 6.09.36 PM.jpeg", "Tu perfil de sabor", "CATA descubre tu estilo: sabores favoritos, insignias e historias de tus comidas."],
-  ["WhatsApp Image 2026-10-21 at 6.48.27 PM.jpeg", "Explora a tu alrededor", "Busca platillos, restaurantes y personas, y encuentra lugares cerca de ti según tu gusto."],
-  ["WhatsApp Image 2026-07-21 at 1.11.18 AM (2).jpeg", "¿No sabes dónde comer?", "Elige un tipo de cocina y deja que CATA sortee un lugar cerca de ti."],
-  ["WhatsApp Image 2026-07-21 at 1.28.35 AM.jpeg", "Conoce cada restaurante", "Fotos, calificaciones y dirección. Guárdalo, márcalo como visitado o súmalo a tu viaje."],
-  ["WhatsApp Image 2026-10-21 at 6.51.51 PM.jpeg", "Registra cada platillo", "Agrega foto, fecha, restaurante y con quién lo compartiste."],
-  ["WhatsApp Image 2026-10-21 at 6.51.51 PM (1).jpeg", "Califica lo que probaste", "Marca ingredientes, sabores y aromas con una intensidad del 1 al 5."],
-  ["WhatsApp Image 2026-10-21 at 6.51.51 PM (2).jpeg", "Revisa y publica", "Confirma tu reseña y elige quién puede verla."],
-  ["WhatsApp Image 2026-10-21 at 1.02.08 PM.jpeg", "Tu radar de sabor", "Descubre qué intensidades dominan tu paladar: mantecoso, cálido, dulce y más."],
-  ["WhatsApp Image 2026-07-20 at 11.53.57 PM (8).jpeg", "Tu diario gastronómico", "Guarda cada viaje como una colección: Italia, Ciudad de México, Copenhague y más."],
-  ["WhatsApp Image 2026-07-20 at 11.53.57 PM (6).jpeg", "Planea tu ruta", "Ve tus paradas en orden sobre el mapa, con un botón para llegar a cada una."],
-  ["WhatsApp Image 2026-07-20 at 11.53.57 PM (5).jpeg", "Agrega paradas a tu viaje", "Restaurante, platillo, fecha, calificación y notas de cada parada."],
-  ["WhatsApp Image 2026-07-20 at 11.41.32 PM (4).jpeg", "Listas para descubrir", "Guarda listas curadas, solicita unirte y compártelas con tus amigos."],
-  ["WhatsApp Image 2026-07-20 at 11.53.57 PM (3).jpeg", "Crea tus propias recetas", "Importa desde un enlace, foto o texto, con ingredientes y pasos."],
+// Files live in public/assets/screens/. Each image is paired with its caption
+// key; the caption text itself lives in the i18n dictionaries.
+const slides: { file: string; key: ShowcaseSlideKey }[] = [
+  { file: "WhatsApp Image 2026-10-21 at 6.09.36 PM.jpeg", key: "profile" },
+  { file: "WhatsApp Image 2026-10-21 at 6.48.27 PM.jpeg", key: "explore" },
+  { file: "WhatsApp Image 2026-07-21 at 1.11.18 AM (2).jpeg", key: "shuffle" },
+  { file: "WhatsApp Image 2026-07-21 at 1.28.35 AM.jpeg", key: "restaurant" },
+  { file: "WhatsApp Image 2026-10-21 at 6.51.51 PM.jpeg", key: "newEntry" },
+  { file: "WhatsApp Image 2026-10-21 at 6.51.51 PM (1).jpeg", key: "rateTaste" },
+  { file: "WhatsApp Image 2026-10-21 at 6.51.51 PM (2).jpeg", key: "publish" },
+  { file: "WhatsApp Image 2026-10-21 at 1.02.08 PM.jpeg", key: "radar" },
+  { file: "WhatsApp Image 2026-07-20 at 11.53.57 PM (8).jpeg", key: "diary" },
+  { file: "WhatsApp Image 2026-07-20 at 11.53.57 PM (6).jpeg", key: "route" },
+  { file: "WhatsApp Image 2026-07-20 at 11.53.57 PM (5).jpeg", key: "addStop" },
+  { file: "WhatsApp Image 2026-07-20 at 11.41.32 PM (4).jpeg", key: "lists" },
+  { file: "WhatsApp Image 2026-07-20 at 11.53.57 PM (3).jpeg", key: "recipes" },
 ];
 
-const screens = slides.map(([name]) => `/assets/screens/${encodeURIComponent(name)}`);
-const captions = slides.map(([, title, text]) => [title, text]);
+const screens = slides.map(({ file }) => `/assets/screens/${encodeURIComponent(file)}`);
 
 export function CataScreensShowcase() {
+  const { t } = useI18n();
   const [index, setIndex] = useState(0);
+  const caption = t.showcase.captions[slides[index].key];
 
   useEffect(() => {
     const id = setInterval(() => {
@@ -57,7 +61,7 @@ export function CataScreensShowcase() {
             >
               <Image
                 src={screens[index]}
-                alt="Captura de la app CATA"
+                alt={t.showcase.imageAlt}
                 fill
                 sizes="300px"
                 className="object-cover object-top"
@@ -79,8 +83,8 @@ export function CataScreensShowcase() {
         ))}
       </div>
       <div className="mt-5 min-h-16 text-center" aria-live="polite">
-        <p className="font-heading text-lg font-semibold">{captions[index][0]}</p>
-        <p className="mx-auto mt-1 max-w-xs text-xs leading-5 text-muted-foreground">{captions[index][1]}</p>
+        <p className="font-heading text-lg font-semibold">{caption.title}</p>
+        <p className="mx-auto mt-1 max-w-xs text-xs leading-5 text-muted-foreground">{caption.text}</p>
       </div>
     </div>
   );

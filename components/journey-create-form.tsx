@@ -6,6 +6,7 @@ import { RestaurantPicker } from "@/components/restaurant-picker";
 import { createJourney } from "@/lib/journeys-service";
 import { saveLead } from "@/lib/leads-service";
 import type { RestaurantEntry } from "@/lib/types";
+import { useI18n } from "@/components/locale-provider";
 
 export function JourneyCreateForm({
   user,
@@ -16,6 +17,7 @@ export function JourneyCreateForm({
   onCreated: (id: string) => void;
   onCancel: () => void;
 }) {
+  const { t } = useI18n();
   const [title, setTitle] = useState("");
   const [city, setCity] = useState("");
   const [email, setEmail] = useState("");
@@ -55,7 +57,7 @@ export function JourneyCreateForm({
       }
       onCreated(id);
     } catch {
-      setError("No pudimos crear tu viaje. Intenta de nuevo.");
+      setError(t.planner.createError);
       setSubmitting(false);
     }
   }
@@ -64,7 +66,7 @@ export function JourneyCreateForm({
     <form onSubmit={handleSubmit} className="mt-6 space-y-5 rounded-2xl border border-border-2 bg-card p-6">
       <div>
         <label htmlFor="journey-title" className="block text-sm font-semibold">
-          Título del viaje
+          {t.planner.tripTitle}
         </label>
         <input
           id="journey-title"
@@ -72,20 +74,20 @@ export function JourneyCreateForm({
           required
           value={title}
           onChange={(e) => setTitle(e.target.value)}
-          placeholder="Ej. Fin de semana en Austin"
+          placeholder={t.planner.tripTitlePlaceholder}
           className="mt-2 min-h-13 w-full rounded-xl border border-border-2 bg-background px-4 text-base outline-none transition placeholder:text-muted-foreground/70 focus:border-accent focus:ring-2 focus:ring-accent/20"
         />
       </div>
       <div>
         <label htmlFor="journey-city" className="block text-sm font-semibold">
-          Ciudad
+          {t.planner.city}
         </label>
         <input
           id="journey-city"
           type="text"
           value={city}
           onChange={(e) => setCity(e.target.value)}
-          placeholder="Opcional — se detecta del primer restaurante"
+          placeholder={t.planner.cityPlaceholder}
           className="mt-2 min-h-13 w-full rounded-xl border border-border-2 bg-background px-4 text-base outline-none transition placeholder:text-muted-foreground/70 focus:border-accent focus:ring-2 focus:ring-accent/20"
         />
       </div>
@@ -93,7 +95,7 @@ export function JourneyCreateForm({
       {needsEmail && (
         <div>
           <label htmlFor="journey-email" className="block text-sm font-semibold">
-            Correo electrónico
+            {t.planner.email}
           </label>
           <input
             id="journey-email"
@@ -101,7 +103,7 @@ export function JourneyCreateForm({
             required
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            placeholder="Para guardar y avisarte sobre tu viaje"
+            placeholder={t.planner.emailPlaceholder}
             className="mt-2 min-h-13 w-full rounded-xl border border-border-2 bg-background px-4 text-base outline-none transition placeholder:text-muted-foreground/70 focus:border-accent focus:ring-2 focus:ring-accent/20"
           />
         </div>
@@ -119,7 +121,7 @@ export function JourneyCreateForm({
                 onClick={() => handleRemoveRestaurant(r.placeId)}
                 className="ml-3 shrink-0 text-xs font-semibold text-destructive"
               >
-                Quitar
+                {t.common.remove}
               </button>
             </li>
           ))}
@@ -138,14 +140,14 @@ export function JourneyCreateForm({
           disabled={submitting || !title.trim() || (needsEmail && !email.trim())}
           className="flex min-h-13 flex-1 items-center justify-center rounded-full bg-foreground px-6 font-semibold text-background transition hover:bg-accent disabled:cursor-not-allowed disabled:opacity-50"
         >
-          {submitting ? "Creando…" : "Crear viaje"}
+          {submitting ? t.planner.creating : t.planner.create}
         </button>
         <button
           type="button"
           onClick={onCancel}
           className="flex min-h-13 items-center justify-center rounded-full border border-border-2 px-6 font-semibold transition hover:bg-secondary"
         >
-          Cancelar
+          {t.planner.cancel}
         </button>
       </div>
     </form>

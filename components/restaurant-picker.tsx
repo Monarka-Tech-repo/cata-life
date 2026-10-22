@@ -3,8 +3,10 @@
 import { useEffect, useRef, useState } from "react";
 import { loadGoogleMapsPlaces } from "@/lib/maps-loader";
 import type { RestaurantEntry } from "@/lib/types";
+import { useI18n } from "@/components/locale-provider";
 
 export function RestaurantPicker({ onSelect }: { onSelect: (restaurant: RestaurantEntry) => void }) {
+  const { t } = useI18n();
   const inputRef = useRef<HTMLInputElement>(null);
   const autocompleteRef = useRef<google.maps.places.Autocomplete | null>(null);
   const [status, setStatus] = useState<"loading" | "ready" | "error">("loading");
@@ -48,7 +50,7 @@ export function RestaurantPicker({ onSelect }: { onSelect: (restaurant: Restaura
   if (status === "error") {
     return (
       <p role="alert" className="text-sm text-destructive">
-        No pudimos cargar la búsqueda de restaurantes. Intenta de nuevo más tarde.
+        {t.picker.loadError}
       </p>
     );
   }
@@ -56,13 +58,13 @@ export function RestaurantPicker({ onSelect }: { onSelect: (restaurant: Restaura
   return (
     <div>
       <label htmlFor="restaurant-search" className="block text-sm font-semibold">
-        Agregar restaurante
+        {t.picker.label}
       </label>
       <input
         id="restaurant-search"
         ref={inputRef}
         type="text"
-        placeholder={status === "loading" ? "Cargando búsqueda…" : "Busca un restaurante"}
+        placeholder={status === "loading" ? t.picker.loading : t.picker.placeholder}
         disabled={status === "loading"}
         className="mt-2 min-h-13 w-full rounded-xl border border-border-2 bg-background px-4 text-base outline-none transition placeholder:text-muted-foreground/70 focus:border-accent focus:ring-2 focus:ring-accent/20 disabled:opacity-60"
       />

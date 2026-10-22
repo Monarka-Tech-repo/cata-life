@@ -8,18 +8,9 @@ import {
   joinDiningGroup,
   loadDiningGroup,
 } from "@/lib/dining-groups";
+import { useI18n } from "@/components/locale-provider";
 
 const playStoreUrl = "https://play.google.com/store/apps/details?id=com.cata.app";
-
-const copy = {
-  loading: "Preparando tu lugar en la mesa…",
-  unavailableTitle: "Esta invitación no está disponible",
-  unavailableBody: "El enlace puede haber vencido, ser incorrecto o el anfitrión pudo haber cerrado las invitaciones.",
-  connectionTitle: "No pudimos abrir la invitación",
-  connectionBody: "Revisa tu conexión e inténtalo de nuevo.",
-  closedTitle: "Esta mesa ya no acepta invitados",
-  closedBody: "Pídele al anfitrión una nueva invitación o confirma que la mesa siga abierta.",
-};
 
 type ViewState =
   | { name: "loading" }
@@ -47,39 +38,43 @@ async function resolveInvite(): Promise<ViewState> {
 }
 
 function MemberStack({ members }: { members: DiningGroupInvite["members"] }) {
-  if (!members.length) return <p className="text-sm text-muted-foreground">Sé la primera persona en unirse.</p>;
+  const { t } = useI18n();
+  const copy = t.joinTable;
+  if (!members.length) return <p className="text-sm text-muted-foreground">{copy.beFirst}</p>;
 
   const visible = members.slice(0, 5);
   return (
     <div className="flex items-center justify-center md:justify-start">
-      <div className="flex -space-x-2" aria-label={`${members.length} personas ya están en la mesa`}>
+      <div className="flex -space-x-2" aria-label={copy.peopleAtTable(members.length)}>
         {visible.map((member, index) => (
           <div
             key={`${member.name}-${index}`}
-            title={member.name}
+            title={member.name || copy.defaultGuest}
             className="relative flex h-10 w-10 items-center justify-center overflow-hidden rounded-full border-2 border-card bg-brand-gold text-sm font-bold text-foreground"
           >
             {member.photoURL ? (
               <span
                 role="img"
-                aria-label={member.name}
+                aria-label={member.name || copy.defaultGuest}
                 className="absolute inset-0 bg-cover bg-center"
                 style={{ backgroundImage: `url(${JSON.stringify(member.photoURL).slice(1, -1)})` }}
               />
             ) : (
-              member.name.slice(0, 1).toUpperCase()
+              (member.name || copy.defaultGuest).slice(0, 1).toUpperCase()
             )}
           </div>
         ))}
       </div>
       <p className="ml-3 text-sm text-muted-foreground">
-        {members.length === 1 ? "1 persona ya está aquí" : `${members.length} personas ya están aquí`}
+        {copy.peopleHere(members.length)}
       </p>
     </div>
   );
 }
 
 function StatusCard({ state, onRetry }: { state: "unavailable" | "connection"; onRetry: () => void }) {
+  const { t, href } = useI18n();
+  const copy = t.joinTable;
   const isConnection = state === "connection";
   return (
     <div className="text-center">
@@ -90,15 +85,17 @@ function StatusCard({ state, onRetry }: { state: "unavailable" | "connection"; o
       </p>
       {isConnection && (
         <button type="button" onClick={onRetry} className="mt-7 rounded-full bg-foreground px-6 py-3 text-sm font-semibold text-background">
-          Intentar de nuevo
+          {t.common.retry}
         </button>
       )}
-      <Link href="/" className="mt-6 block text-sm font-medium text-accent underline underline-offset-4">Ir a CATA</Link>
+      <Link href={href("/")} className="mt-6 block text-sm font-medium text-accent underline underline-offset-4">{copy.goToCata}</Link>
     </div>
   );
 }
 
 export function JoinTableClient() {
+  const { t } = useI18n();
+  const copy = t.joinTable;
   const [state, setState] = useState<ViewState>({ name: "loading" });
   const [displayName, setDisplayName] = useState("");
   const [submitting, setSubmitting] = useState(false);
@@ -144,18 +141,18 @@ export function JoinTableClient() {
     return (
       <div className="text-center">
         <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-brand-green/15 text-3xl" aria-hidden="true">✓</div>
-        <p className="mt-6 font-hand text-2xl font-semibold text-accent">¡Ya estás en la mesa!</p>
-        <h1 className="mt-2 text-4xl font-semibold">{state.invite.name}</h1>
+        <p className="mt-6 font-hand text-2xl font-semibold text-accent">{copy.joinedEyebrow}</p>
+        <h1 className="mt-2 text-4xl font-semibold">{state.invite.name || copy.defaultTableName}</h1>
         <p className="mt-3 text-muted-foreground">
-          {state.guestName ? `${state.guestName}, tu lugar quedó guardado.` : "Tu lugar ya estaba guardado."}
+          {state.guestName ? copy.placeSaved(state.guestName) : copy.placeAlreadySaved}
         </p>
         <div className="mt-8 rounded-2xl bg-secondary p-5 text-sm leading-6 text-muted-foreground">
-          Abre CATA para dividir la cuenta, ordenar y participar con el grupo. Esas funciones están disponibles únicamente dentro de la app.
+          {copy.openAppNote}
         </div>
         <a href={playStoreUrl} target="_blank" rel="noopener noreferrer" className="mt-7 inline-flex min-h-12 items-center rounded-full bg-foreground px-6 font-semibold text-background transition hover:bg-accent">
-          Descargar para Android
+          {copy.downloadAndroid}
         </a>
-        <p className="mt-4 text-sm text-muted-foreground">Versión para iPhone: próximamente en App Store.</p>
+        <p className="mt-4 text-sm text-muted-foreground">{copy.iphoneSoon}</p>
       </div>
     );
   }
@@ -166,18 +163,18 @@ export function JoinTableClient() {
       {invite.restaurantPhoto && (
         <div
           role="img"
-          aria-label={invite.restaurantName}
+          aria-label={invite.restaurantName || copy.defaultRestaurant}
           className="mb-7 h-40 rounded-2xl bg-surface-3 bg-cover bg-center"
           style={{ backgroundImage: `linear-gradient(to top, rgba(26,26,24,.25), transparent), url(${JSON.stringify(invite.restaurantPhoto).slice(1, -1)})` }}
         />
       )}
-      <p className="font-hand text-2xl font-semibold text-accent">Te invitaron a compartir la mesa</p>
-      <h1 className="mt-2 text-4xl font-semibold leading-tight">{invite.name}</h1>
-      <p className="mt-3 text-muted-foreground">{invite.restaurantName}</p>
+      <p className="font-hand text-2xl font-semibold text-accent">{copy.invitedEyebrow}</p>
+      <h1 className="mt-2 text-4xl font-semibold leading-tight">{invite.name || copy.defaultTableName}</h1>
+      <p className="mt-3 text-muted-foreground">{invite.restaurantName || copy.defaultRestaurant}</p>
       <div className="mt-6"><MemberStack members={invite.members} /></div>
 
       <form onSubmit={handleSubmit} className="mt-9">
-        <label htmlFor="guest-name" className="block text-sm font-semibold">¿Cómo te llamas?</label>
+        <label htmlFor="guest-name" className="block text-sm font-semibold">{copy.nameLabel}</label>
         <input
           id="guest-name"
           name="guest-name"
@@ -187,7 +184,7 @@ export function JoinTableClient() {
           required
           value={displayName}
           onChange={(event) => setDisplayName(event.target.value)}
-          placeholder="Tu nombre"
+          placeholder={copy.namePlaceholder}
           className="mt-2 min-h-13 w-full rounded-xl border border-border-2 bg-background px-4 text-base outline-none transition placeholder:text-muted-foreground/70 focus:border-accent focus:ring-2 focus:ring-accent/20"
         />
         {submitError && (
@@ -201,11 +198,11 @@ export function JoinTableClient() {
           disabled={submitting || !displayName.trim()}
           className="mt-5 flex min-h-13 w-full items-center justify-center rounded-full bg-foreground px-6 font-semibold text-background transition hover:bg-accent disabled:cursor-not-allowed disabled:opacity-50"
         >
-          {submitting ? "Guardando tu lugar…" : "Unirme a la mesa"}
+          {submitting ? copy.saving : copy.join}
         </button>
       </form>
       <p className="mt-5 text-center text-xs leading-5 text-muted-foreground">
-        Al continuar se crea un acceso temporal seguro para añadirte a esta mesa.
+        {copy.temporaryAccess}
       </p>
     </div>
   );

@@ -57,7 +57,7 @@ function parseMembers(value: unknown): DiningGroupMember[] {
   return Object.values(value).flatMap((member) => {
     if (!member || typeof member !== "object" || Array.isArray(member)) return [];
     const data = member as Record<string, unknown>;
-    return [{ name: textValue(data.name, "Invitado"), photoURL: photoValue(data.photoURL) }];
+    return [{ name: textValue(data.name, ""), photoURL: photoValue(data.photoURL) }];
   });
 }
 
@@ -76,8 +76,9 @@ export async function loadDiningGroup(tableId: string): Promise<DiningGroupInvit
 
     return {
       id: tableId,
-      name: textValue(data.name, "Mesa de CATA"),
-      restaurantName: textValue(data.restaurantName, "Restaurante por confirmar"),
+      // Empty when missing — the UI shows a localized fallback.
+      name: textValue(data.name, ""),
+      restaurantName: textValue(data.restaurantName, ""),
       restaurantPhoto: photoValue(data.restaurantPhoto),
       members: parseMembers(data.memberInfo),
       status: textValue(data.status, ""),

@@ -9,22 +9,11 @@ import {
   topTags,
 } from "@/lib/taste-profile";
 import type { Dish } from "@/lib/types";
+import { useI18n } from "@/components/locale-provider";
 
 type Mode = "type" | "taste" | "cuisine" | "ratings";
 
-const MODE_OPTIONS: { key: Mode; label: string }[] = [
-  { key: "type", label: "TIPO DE COMIDA" },
-  { key: "taste", label: "SABOR" },
-  { key: "cuisine", label: "COCINA" },
-  { key: "ratings", label: "CALIFICACIONES" },
-];
-
-const EMPTY_HINTS: Record<Mode, string> = {
-  type: "Registra platillos en la app para ver tu distribución por tipo de comida",
-  taste: "Registra platillos con etiquetas de sabor para ver tu perfil de sabor",
-  cuisine: "Registra platillos en distintos restaurantes para ver tu distribución por cocina",
-  ratings: "Califica platillos con etiquetas para ver qué es lo que mejor calificas",
-};
+const MODES: Mode[] = ["type", "taste", "cuisine", "ratings"];
 
 function titleCase(str: string) {
   return str.charAt(0).toUpperCase() + str.slice(1);
@@ -39,6 +28,7 @@ export function TasteProfileCard({
   vesselSize?: number;
   bordered?: boolean;
 }) {
+  const { t } = useI18n();
   const [mode, setMode] = useState<Mode>("type");
 
   const segments =
@@ -55,18 +45,18 @@ export function TasteProfileCard({
   return (
     <div>
       <div className="flex flex-wrap gap-2">
-        {MODE_OPTIONS.map((opt) => (
+        {MODES.map((key) => (
           <button
-            key={opt.key}
+            key={key}
             type="button"
-            onClick={() => setMode(opt.key)}
+            onClick={() => setMode(key)}
             className={`rounded-full border px-4 py-2 text-xs font-semibold tracking-wide transition ${
-              mode === opt.key
+              mode === key
                 ? "border-foreground bg-foreground text-background"
                 : "border-border-2 bg-secondary text-foreground"
             }`}
           >
-            {opt.label}
+            {t.taste.modes[key]}
           </button>
         ))}
       </div>
@@ -77,7 +67,7 @@ export function TasteProfileCard({
             bordered ? "rounded-2xl border border-border-2 bg-card p-6" : ""
           }`}
         >
-          <TasteVessel segments={segments} size={vesselSize} />
+          <TasteVessel segments={segments} size={vesselSize} label={t.taste.vesselLabel} />
           <div className="flex-1 space-y-3">
             {segments.map((seg) => (
               <div key={seg.key}>
@@ -90,9 +80,9 @@ export function TasteProfileCard({
                 </div>
                 <p className="ml-[18px] text-xs text-muted-foreground">
                   {byRatings
-                    ? `${seg.count} ${seg.count === 1 ? "registro" : "registros"}`
+                    ? t.taste.entries(seg.count)
                     : seg.avgRating > 0
-                      ? `★ ${seg.avgRating.toFixed(1)} · ${seg.count} ${seg.count === 1 ? "registro" : "registros"}`
+                      ? `★ ${seg.avgRating.toFixed(1)} · ${t.taste.entries(seg.count)}`
                       : null}
                 </p>
               </div>
@@ -100,7 +90,7 @@ export function TasteProfileCard({
           </div>
         </div>
       ) : (
-        <p className="mt-6 text-sm italic text-muted-foreground">{EMPTY_HINTS[mode]}</p>
+        <p className="mt-6 text-sm italic text-muted-foreground">{t.taste.emptyHints[mode]}</p>
       )}
 
       {flavorTags.length > 0 && (

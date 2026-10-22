@@ -5,6 +5,7 @@ import { RestaurantPicker } from "@/components/restaurant-picker";
 import { useAuth } from "@/hooks/use-auth";
 import { addRestaurantToJourney } from "@/lib/journeys-service";
 import type { FoodJourneyList, RestaurantEntry } from "@/lib/types";
+import { useI18n } from "@/components/locale-provider";
 
 export function JourneyDetail({
   journey,
@@ -16,6 +17,7 @@ export function JourneyDetail({
   onUpdated: (journey: FoodJourneyList) => void;
 }) {
   const { user } = useAuth();
+  const { t } = useI18n();
   const isOwner = user?.uid === journey.userId;
   const [adding, setAdding] = useState(false);
 
@@ -33,14 +35,14 @@ export function JourneyDetail({
   return (
     <div>
       <button type="button" onClick={onBack} className="text-sm font-medium text-accent underline underline-offset-4">
-        ← Todos tus viajes
+        {t.planner.allTrips}
       </button>
 
       <h2 className="mt-4 font-heading text-3xl italic normal-case">{journey.title}</h2>
-      <p className="mt-1 text-sm text-muted-foreground">{journey.city || "Sin ciudad"}</p>
+      <p className="mt-1 text-sm text-muted-foreground">{journey.city || t.planner.noCity}</p>
 
       {journey.restaurants.length === 0 ? (
-        <p className="mt-6 text-sm italic text-muted-foreground">Aún no hay restaurantes en este viaje.</p>
+        <p className="mt-6 text-sm italic text-muted-foreground">{t.planner.noRestaurants}</p>
       ) : (
         <ul className="mt-6 space-y-3">
           {journey.restaurants.map((r) => (

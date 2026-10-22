@@ -25,7 +25,7 @@ function sectorPath(startAngle: number, endAngle: number): string {
 
 type Slice = ProfileSegment & { d: string; angleEnd: number };
 
-export function TasteVessel({ segments, size = 120 }: { segments: ProfileSegment[]; size?: number }) {
+export function TasteVessel({ segments, size = 120, label }: { segments: ProfileSegment[]; size?: number; label: string }) {
   const slices = segments.reduce<Slice[]>((acc, seg) => {
     const angleStart = acc.length ? acc[acc.length - 1].angleEnd : -Math.PI / 2;
     const angleEnd = angleStart + (seg.pct / 100) * Math.PI * 2;
@@ -33,7 +33,7 @@ export function TasteVessel({ segments, size = 120 }: { segments: ProfileSegment
   }, []);
 
   return (
-    <svg width={size} height={size} viewBox="0 0 100 100" role="img" aria-label="Distribución de tu perfil de sabor">
+    <svg width={size} height={size} viewBox="0 0 100 100" role="img" aria-label={label}>
       {slices.length > 0 ? (
         slices.map((sl) => <path key={sl.key} d={sl.d} fill={sl.color} />)
       ) : (

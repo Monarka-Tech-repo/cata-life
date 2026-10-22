@@ -6,10 +6,12 @@ import { WorldMapBackground } from "@/components/world-map-background";
 import { getOrCreateSessionUser } from "@/lib/anonymous-auth";
 import { fetchGlobalDishSample } from "@/lib/dishes-service";
 import type { Dish } from "@/lib/types";
+import { useI18n } from "@/components/locale-provider";
 
 type State = { status: "loading" } | { status: "error" } | { status: "ready"; dishes: Dish[] };
 
 export function GlobalTasteExplorer() {
+  const { t } = useI18n();
   const [state, setState] = useState<State>({ status: "loading" });
   const [search, setSearch] = useState("");
 
@@ -46,7 +48,7 @@ export function GlobalTasteExplorer() {
   if (state.status === "error") {
     return (
       <div role="alert" className="rounded-2xl bg-destructive/10 p-6 text-center text-sm text-destructive">
-        No pudimos cargar los gustos del mundo.
+        {t.community.worldError}
       </div>
     );
   }
@@ -54,7 +56,7 @@ export function GlobalTasteExplorer() {
   if (state.dishes.length === 0) {
     return (
       <div className="rounded-2xl border border-dashed border-border-2 bg-secondary p-8 text-center text-sm text-muted-foreground">
-        Todavía no hay suficientes platillos registrados en CATA para mostrar esto.
+        {t.community.worldEmpty}
       </div>
     );
   }
@@ -65,20 +67,20 @@ export function GlobalTasteExplorer() {
         {filteredDishes.length > 0 ? (
           <TasteProfileCard dishes={filteredDishes} vesselSize={220} bordered={false} />
         ) : (
-          <p className="text-sm italic text-muted-foreground">No encontramos platillos registrados para esa ciudad.</p>
+          <p className="text-sm italic text-muted-foreground">{t.community.cityEmpty}</p>
         )}
       </div>
 
       <div>
         <label htmlFor="global-city-search" className="block text-sm font-semibold">
-          Busca una ciudad
+          {t.community.citySearch}
         </label>
         <input
           id="global-city-search"
           type="text"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          placeholder="Ej. Chicago o Nueva York"
+          placeholder={t.community.citySearchPlaceholder}
           className="mt-2 min-h-13 w-full rounded-full border border-border-2 bg-secondary px-5 text-base outline-none transition placeholder:text-muted-foreground/70 focus:border-accent focus:ring-2 focus:ring-accent/20"
         />
         <div className="relative mt-4 aspect-[16/10] w-full overflow-hidden">

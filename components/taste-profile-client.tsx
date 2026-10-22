@@ -6,6 +6,7 @@ import { TasteQuiz } from "@/components/taste-quiz";
 import { useAuth } from "@/hooks/use-auth";
 import { fetchUserDishes } from "@/lib/dishes-service";
 import type { Dish } from "@/lib/types";
+import { useI18n } from "@/components/locale-provider";
 
 type LoadState =
   | { status: "loading" }
@@ -13,6 +14,7 @@ type LoadState =
   | { status: "ready"; dishes: Dish[] };
 
 function RealProfile({ uid }: { uid: string }) {
+  const { t } = useI18n();
   const [state, setState] = useState<LoadState>({ status: "loading" });
 
   useEffect(() => {
@@ -44,9 +46,9 @@ function RealProfile({ uid }: { uid: string }) {
   if (state.status === "error") {
     return (
       <div role="alert" className="rounded-2xl bg-destructive/10 p-6 text-center text-sm text-destructive">
-        No pudimos cargar tu perfil de gustos. Intenta de nuevo más tarde.
+        {t.taste.loadError}
         <br />
-        Si el problema persiste, escríbenos a{" "}
+        {t.common.supportPersist}{" "}
         <a href="mailto:cata.support@monarka.tech" className="underline underline-offset-4">
           cata.support@monarka.tech
         </a>
@@ -58,7 +60,7 @@ function RealProfile({ uid }: { uid: string }) {
   if (state.dishes.length === 0) {
     return (
       <div className="rounded-2xl border border-dashed border-border-2 bg-secondary p-8 text-center text-sm text-muted-foreground">
-        Aún no has registrado platillos — abre la app CATA para tu primer registro y tu perfil de gustos aparecerá aquí.
+        {t.taste.empty}
       </div>
     );
   }
@@ -68,6 +70,7 @@ function RealProfile({ uid }: { uid: string }) {
 
 export function TasteProfileClient() {
   const { isRealUser, loading, user } = useAuth();
+  const { t, href } = useI18n();
 
   if (loading) {
     return (
@@ -86,11 +89,11 @@ export function TasteProfileClient() {
   return (
     <div>
       <p className="mb-6 rounded-xl bg-secondary p-4 text-sm text-muted-foreground">
-        ¿Ya tienes cuenta en CATA?{" "}
-        <a href="/login" className="font-semibold text-accent underline underline-offset-4">
-          Inicia sesión
+        {t.taste.haveAccount}{" "}
+        <a href={href("/login")} className="font-semibold text-accent underline underline-offset-4">
+          {t.taste.signInLink}
         </a>{" "}
-        para ver tu perfil real basado en los platillos que has registrado. Si no, prueba este cuestionario rápido:
+        {t.taste.haveAccountRest}
       </p>
       <TasteQuiz />
     </div>

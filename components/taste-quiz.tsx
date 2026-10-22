@@ -7,20 +7,12 @@ import { getOrCreateSessionUser } from "@/lib/anonymous-auth";
 import { PROFILE_COLORS } from "@/lib/taste-profile";
 import { saveTasteQuizResponse } from "@/lib/taste-quiz-service";
 import type { RestaurantEntry } from "@/lib/types";
+import { useI18n } from "@/components/locale-provider";
 
 const FLAVOR_OPTIONS = ["Sweet", "Sour", "Salty", "Bitter", "Spicy", "Umami", "Smoky"];
 
-const FLAVOR_LABEL_ES: Record<string, string> = {
-  Sweet: "Dulce",
-  Sour: "Ácido",
-  Salty: "Salado",
-  Bitter: "Amargo",
-  Spicy: "Picante",
-  Umami: "Umami",
-  Smoky: "Ahumado",
-};
-
 export function TasteQuiz() {
+  const { t } = useI18n();
   const [flavorTags, setFlavorTags] = useState<string[]>([]);
   const [restaurants, setRestaurants] = useState<RestaurantEntry[]>([]);
   const [email, setEmail] = useState("");
@@ -54,7 +46,7 @@ export function TasteQuiz() {
       });
       setDone(true);
     } catch {
-      setError("No pudimos guardar tus respuestas. Intenta de nuevo.");
+      setError(t.quiz.saveError);
     } finally {
       setSubmitting(false);
     }
@@ -70,20 +62,20 @@ export function TasteQuiz() {
     }));
     return (
       <div className="flex flex-col items-center rounded-2xl border border-border-2 bg-card p-8 text-center">
-        <p className="font-hand text-2xl font-semibold text-accent">¡Listo!</p>
-        <h2 className="mt-1 font-heading text-3xl italic normal-case">Tu primer perfil de gustos</h2>
+        <p className="font-hand text-2xl font-semibold text-accent">{t.quiz.doneEyebrow}</p>
+        <h2 className="mt-1 font-heading text-3xl italic normal-case">{t.quiz.doneTitle}</h2>
         <div className="mt-6">
-          <TasteVessel segments={segments} size={140} />
+          <TasteVessel segments={segments} size={140} label={t.taste.vesselLabel} />
         </div>
         <div className="mt-5 flex flex-wrap justify-center gap-2">
           {flavorTags.map((tag) => (
             <span key={tag} className="rounded-full border border-border-2 bg-secondary px-3 py-1.5 text-[10px] font-semibold tracking-widest">
-              {(FLAVOR_LABEL_ES[tag] || tag).toUpperCase()}
+              {(t.flavors[tag] || tag).toUpperCase()}
             </span>
           ))}
         </div>
         <p className="mt-6 max-w-sm text-sm text-muted-foreground">
-          Guardamos tus respuestas — pronto usaremos esto para recomendarte viajes gastronómicos personalizados.
+          {t.quiz.doneBody}
         </p>
       </div>
     );
@@ -92,7 +84,7 @@ export function TasteQuiz() {
   return (
     <form onSubmit={handleSubmit} className="space-y-6 rounded-2xl border border-border-2 bg-card p-6">
       <div>
-        <p className="text-sm font-semibold">¿Qué sabores te gustan más?</p>
+        <p className="text-sm font-semibold">{t.quiz.flavorsQuestion}</p>
         <div className="mt-3 flex flex-wrap gap-2">
           {FLAVOR_OPTIONS.map((tag) => (
             <button
@@ -105,14 +97,14 @@ export function TasteQuiz() {
                   : "border-border-2 bg-secondary text-foreground"
               }`}
             >
-              {FLAVOR_LABEL_ES[tag] || tag}
+              {t.flavors[tag] || tag}
             </button>
           ))}
         </div>
       </div>
 
       <div>
-        <p className="text-sm font-semibold">Tus restaurantes favoritos</p>
+        <p className="text-sm font-semibold">{t.quiz.favoriteRestaurants}</p>
         <div className="mt-3">
           <RestaurantPicker onSelect={handleSelectRestaurant} />
         </div>
@@ -126,7 +118,7 @@ export function TasteQuiz() {
                   onClick={() => handleRemoveRestaurant(r.placeId)}
                   className="ml-3 shrink-0 text-xs font-semibold text-destructive"
                 >
-                  Quitar
+                  {t.common.remove}
                 </button>
               </li>
             ))}
@@ -136,14 +128,14 @@ export function TasteQuiz() {
 
       <div>
         <label htmlFor="quiz-email" className="block text-sm font-semibold">
-          Correo (opcional)
+          {t.quiz.emailLabel}
         </label>
         <input
           id="quiz-email"
           type="email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          placeholder="Para avisarte cuando tengamos recomendaciones para ti"
+          placeholder={t.quiz.emailPlaceholder}
           className="mt-2 min-h-13 w-full rounded-xl border border-border-2 bg-background px-4 text-base outline-none transition placeholder:text-muted-foreground/70 focus:border-accent focus:ring-2 focus:ring-accent/20"
         />
       </div>
@@ -159,7 +151,7 @@ export function TasteQuiz() {
         disabled={submitting || flavorTags.length === 0}
         className="flex min-h-13 w-full items-center justify-center rounded-full bg-foreground px-6 font-semibold text-background transition hover:bg-accent disabled:cursor-not-allowed disabled:opacity-50"
       >
-        {submitting ? "Guardando…" : "Ver mi perfil de gustos"}
+        {submitting ? t.quiz.saving : t.quiz.submit}
       </button>
     </form>
   );

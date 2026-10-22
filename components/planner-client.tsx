@@ -9,6 +9,7 @@ import { JourneyList } from "@/components/journey-list";
 import { getOrCreateSessionUser } from "@/lib/anonymous-auth";
 import { fetchJourneyById, fetchUserJourneys } from "@/lib/journeys-service";
 import type { FoodJourneyList } from "@/lib/types";
+import { useI18n } from "@/components/locale-provider";
 
 type View =
   | { name: "loading" }
@@ -19,6 +20,7 @@ type View =
 
 export function PlannerClient() {
   const router = useRouter();
+  const { t, href } = useI18n();
   const [user, setUser] = useState<User | null>(null);
   const [view, setView] = useState<View>({ name: "loading" });
 
@@ -52,16 +54,16 @@ export function PlannerClient() {
   }, []);
 
   function openJourney(journey: FoodJourneyList, journeys: FoodJourneyList[]) {
-    router.push(`/planner?trip=${journey.id}`);
+    router.push(`${href("/planner")}?trip=${encodeURIComponent(journey.id)}`);
     setView({ name: "detail", journey, journeys });
   }
 
   if (view.name === "error") {
     return (
       <div role="alert" className="rounded-2xl bg-destructive/10 p-6 text-center text-sm text-destructive">
-        No pudimos cargar tus viajes. Intenta de nuevo más tarde.
+        {t.planner.loadError}
         <br />
-        Si el problema persiste, escríbenos a{" "}
+        {t.common.supportPersist}{" "}
         <a href="mailto:cata.support@monarka.tech" className="underline underline-offset-4">
           cata.support@monarka.tech
         </a>
@@ -83,7 +85,7 @@ export function PlannerClient() {
       <JourneyCreateForm
         user={user}
         onCancel={() => {
-          router.push("/planner");
+          router.push(href("/planner"));
           setView({ name: "list", journeys: view.journeys });
         }}
         onCreated={(id) => {
@@ -100,7 +102,7 @@ export function PlannerClient() {
       <JourneyDetail
         journey={view.journey}
         onBack={() => {
-          router.push("/planner");
+          router.push(href("/planner"));
           setView({ name: "list", journeys: view.journeys });
         }}
         onUpdated={(journey) => setView({ name: "detail", journey, journeys: view.journeys })}

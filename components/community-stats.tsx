@@ -5,16 +5,7 @@ import { TasteVessel } from "@/components/taste-vessel";
 import { fetchAllRecommendations, fetchGlobalFlavorTags } from "@/lib/community-service";
 import { fetchPlaceRatings, type PlaceRating } from "@/lib/place-ratings-service";
 import { PROFILE_COLORS, type ProfileSegment } from "@/lib/taste-profile";
-
-const FLAVOR_LABEL_ES: Record<string, string> = {
-  Sweet: "Dulce",
-  Sour: "Ácido",
-  Salty: "Salado",
-  Bitter: "Amargo",
-  Spicy: "Picante",
-  Umami: "Umami",
-  Smoky: "Ahumado",
-};
+import { useI18n } from "@/components/locale-provider";
 
 type TopRestaurant = { name: string; count: number; placeId: string | null };
 
@@ -24,11 +15,8 @@ type State =
   | { status: "empty" }
   | { status: "ready"; segments: ProfileSegment[]; participants: number; topRestaurants: TopRestaurant[] };
 
-function titleCase(str: string) {
-  return FLAVOR_LABEL_ES[str] || str;
-}
-
 export function CommunityStats() {
+  const { t } = useI18n();
   const [state, setState] = useState<State>({ status: "loading" });
   const [ratings, setRatings] = useState<Map<string, PlaceRating>>(new Map());
 
@@ -101,7 +89,7 @@ export function CommunityStats() {
   if (state.status === "error") {
     return (
       <div role="alert" className="rounded-2xl bg-destructive/10 p-6 text-center text-sm text-destructive">
-        No pudimos cargar las estadísticas de la comunidad.
+        {t.community.statsError}
       </div>
     );
   }
@@ -109,7 +97,7 @@ export function CommunityStats() {
   if (state.status === "empty") {
     return (
       <div className="rounded-2xl border border-dashed border-border-2 bg-secondary p-8 text-center text-sm text-muted-foreground">
-        Todavía no hay suficientes respuestas — sé de las primeras personas en tomar el cuestionario de gustos.
+        {t.community.statsEmpty}
       </div>
     );
   }
@@ -117,16 +105,16 @@ export function CommunityStats() {
   return (
     <div>
       <p className="text-sm text-muted-foreground">
-        Basado en {state.participants} {state.participants === 1 ? "persona" : "personas"} que han tomado el cuestionario de gustos.
+        {t.community.basedOn(state.participants)}
       </p>
 
       <div className="mt-6 flex flex-col items-center gap-6 rounded-2xl border border-border-2 bg-card p-6 sm:flex-row">
-        <TasteVessel segments={state.segments} size={128} />
+        <TasteVessel segments={state.segments} size={128} label={t.taste.vesselLabel} />
         <div className="flex-1 space-y-3">
           {state.segments.map((seg) => (
             <div key={seg.key} className="flex items-center gap-2">
               <span className="h-2.5 w-2.5 shrink-0 rounded-full" style={{ backgroundColor: seg.color }} />
-              <span className="flex-1 text-sm font-semibold">{titleCase(seg.key)}</span>
+              <span className="flex-1 text-sm font-semibold">{t.flavors[seg.key] || seg.key}</span>
               <span className="text-sm font-bold">{Math.round(seg.pct)}%</span>
             </div>
           ))}
@@ -135,7 +123,7 @@ export function CommunityStats() {
 
       {state.topRestaurants.length > 0 && (
         <div className="mt-8">
-          <h3 className="text-sm font-semibold uppercase tracking-widest text-accent">Restaurantes más recomendados</h3>
+          <h3 className="text-sm font-semibold uppercase tracking-widest text-accent">{t.community.topRestaurants}</h3>
           <ul className="mt-3 space-y-2">
             {state.topRestaurants.map((r) => {
               const rating = r.placeId ? ratings.get(r.placeId) : undefined;
@@ -144,18 +132,18 @@ export function CommunityStats() {
                   <div className="flex items-center justify-between">
                     <span className="truncate font-medium">{r.name}</span>
                     <span className="ml-3 shrink-0 text-xs font-semibold text-muted-foreground">
-                      {r.count} {r.count === 1 ? "recomendación" : "recomendaciones"}
+                      {t.community.recommendationCount(r.count)}
                     </span>
                   </div>
                   {rating?.rating != null && (
                     <p className="mt-1 text-xs text-muted-foreground">
-                      ★ {rating.rating.toFixed(1)} en Google
-                      {rating.userRatingCount != null && ` · ${rating.userRatingCount} reseñas`}
+                      {t.community.googleRating(rating.rating.toFixed(1))}
+                      {rating.userRatingCount != null && t.community.googleReviews(rating.userRatingCount)}
                       {rating.googleMapsURI && (
                         <>
                           {" · "}
                           <a href={rating.googleMapsURI} target="_blank" rel="noopener noreferrer" className="underline underline-offset-2">
-                            Ver en Google Maps
+                            {t.community.viewOnMaps}
                           </a>
                         </>
                       )}

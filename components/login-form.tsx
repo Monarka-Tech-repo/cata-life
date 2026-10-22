@@ -9,11 +9,13 @@ import {
   signUpWithEmail,
 } from "@/lib/auth-service";
 import { firebaseErrorCode, getAuthErrorMessage } from "@/lib/auth-error-messages";
+import { useI18n } from "@/components/locale-provider";
 
 type Mode = "signin" | "signup";
 
 export function LoginForm() {
   const router = useRouter();
+  const { t, href } = useI18n();
   const [mode, setMode] = useState<Mode>("signin");
   const [displayName, setDisplayName] = useState("");
   const [email, setEmail] = useState("");
@@ -22,12 +24,13 @@ export function LoginForm() {
   const [googleSubmitting, setGoogleSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [resetSent, setResetSent] = useState(false);
-  const [next, setNext] = useState("/");
+  const [next, setNext] = useState(() => href("/"));
 
   useEffect(() => {
     void Promise.resolve().then(() => {
       const target = new URLSearchParams(window.location.search).get("next");
-      if (target && target.startsWith("/")) setNext(target);
+      // Same-site paths only: "//host" and "/\host" would leave the site.
+      if (target && target.startsWith("/") && !/^\/[\\/]/.test(target)) setNext(target);
     });
   }, []);
 
@@ -45,7 +48,7 @@ export function LoginForm() {
       }
       router.push(next);
     } catch (err) {
-      setError(getAuthErrorMessage(firebaseErrorCode(err)));
+      setError(getAuthErrorMessage(firebaseErrorCode(err), t.authErrors));
     } finally {
       setSubmitting(false);
     }
@@ -60,7 +63,7 @@ export function LoginForm() {
       await signInWithGoogle();
       router.push(next);
     } catch (err) {
-      setError(getAuthErrorMessage(firebaseErrorCode(err)));
+      setError(getAuthErrorMessage(firebaseErrorCode(err), t.authErrors));
     } finally {
       setGoogleSubmitting(false);
     }
@@ -68,7 +71,7 @@ export function LoginForm() {
 
   async function handleForgotPassword() {
     if (!email.trim()) {
-      setError("Escribe tu correo arriba y toca de nuevo en “Olvidé mi contraseña”.");
+      setError(t.login.forgotNeedsEmail);
       return;
     }
     setError(null);
@@ -76,7 +79,7 @@ export function LoginForm() {
       await resetPassword(email.trim());
       setResetSent(true);
     } catch (err) {
-      setError(getAuthErrorMessage(firebaseErrorCode(err)));
+      setError(getAuthErrorMessage(firebaseErrorCode(err), t.authErrors));
     }
   }
 
@@ -92,7 +95,7 @@ export function LoginForm() {
             mode === "signin" ? "bg-foreground text-background" : "text-muted-foreground"
           }`}
         >
-          Iniciar sesión
+          {t.login.signIn}
         </button>
         <button
           type="button"
@@ -101,7 +104,7 @@ export function LoginForm() {
             mode === "signup" ? "bg-foreground text-background" : "text-muted-foreground"
           }`}
         >
-          Crear cuenta
+          {t.login.signUp}
         </button>
       </div>
 
@@ -109,7 +112,7 @@ export function LoginForm() {
         {mode === "signup" && (
           <div>
             <label htmlFor="displayName" className="block text-sm font-semibold">
-              Nombre
+              {t.login.name}
             </label>
             <input
               id="displayName"
@@ -124,7 +127,7 @@ export function LoginForm() {
         )}
         <div>
           <label htmlFor="email" className="block text-sm font-semibold">
-            Correo electrónico
+            {t.login.email}
           </label>
           <input
             id="email"
@@ -138,7 +141,7 @@ export function LoginForm() {
         </div>
         <div>
           <label htmlFor="password" className="block text-sm font-semibold">
-            Contraseña
+            {t.login.password}
           </label>
           <input
             id="password"
@@ -158,13 +161,13 @@ export function LoginForm() {
             onClick={handleForgotPassword}
             className="text-sm font-medium text-accent underline underline-offset-4"
           >
-            Olvidé mi contraseña
+            {t.login.forgotPassword}
           </button>
         )}
 
         {resetSent && (
           <div role="status" className="rounded-xl bg-brand-green/10 p-4 text-sm text-foreground">
-            Te enviamos un correo para restablecer tu contraseña.
+            {t.login.resetSent}
           </div>
         )}
         {error && (
@@ -178,13 +181,13 @@ export function LoginForm() {
           disabled={busy}
           className="flex min-h-13 w-full items-center justify-center rounded-full bg-foreground px-6 font-semibold text-background transition hover:bg-accent disabled:cursor-not-allowed disabled:opacity-50"
         >
-          {submitting ? "Un momento…" : mode === "signup" ? "Crear cuenta" : "Iniciar sesión"}
+          {submitting ? t.login.wait : mode === "signup" ? t.login.signUp : t.login.signIn}
         </button>
       </form>
 
       <div className="my-6 flex items-center gap-3">
         <div className="h-px flex-1 bg-border" />
-        <span className="text-xs uppercase tracking-widest text-muted-foreground">o</span>
+        <span className="text-xs uppercase tracking-widest text-muted-foreground">{t.login.or}</span>
         <div className="h-px flex-1 bg-border" />
       </div>
 
@@ -194,7 +197,7 @@ export function LoginForm() {
         disabled={busy}
         className="flex min-h-13 w-full items-center justify-center gap-2 rounded-full border border-border-2 bg-background px-6 font-semibold text-foreground transition hover:bg-secondary disabled:cursor-not-allowed disabled:opacity-50"
       >
-        {googleSubmitting ? "Un momento…" : "Continuar con Google"}
+        {googleSubmitting ? t.login.wait : t.login.google}
       </button>
     </div>
   );

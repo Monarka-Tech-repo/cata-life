@@ -3,34 +3,47 @@ import Image from "next/image";
 import Link from "next/link";
 import { BookHeart, ChartNoAxesCombined, ChevronDown, Camera, Sparkles, UsersRound } from "lucide-react";
 import { CataScreensShowcase } from "@/components/cata-screens-showcase";
+import { localizePath, type Locale } from "@/lib/i18n/config";
+import { getDictionary, pageAlternates } from "@/lib/i18n";
 
 const testFlightUrl = "https://testflight.apple.com/join/wpZP6h12";
 
-const benefits = [
-  {
-    icon: BookHeart,
-    title: "Tu diario gastronómico",
-    body: "Guarda cada platillo con fotos, calificaciones y notas para recordar lo que realmente valió la pena.",
-  },
-  {
-    icon: UsersRound,
-    title: "Comparte la mesa",
-    body: "Invita a tus amigos, arma el pedido de todos y divide la cuenta sin perder el sabor del momento.",
-  },
-  {
-    icon: ChartNoAxesCombined,
-    title: "Descubre tu gusto",
-    body: "Convierte tus registros en un perfil vivo de cocinas, sabores y lugares que cuentan tu historia.",
-  },
-];
+const benefitIcons = [
+  { key: "diary", icon: BookHeart },
+  { key: "share", icon: UsersRound },
+  { key: "discover", icon: ChartNoAxesCombined },
+] as const;
 
-const steps = [
-  { number: "01", icon: Camera, title: "Prueba algo", body: "Visita un restaurante y fotografía el platillo que quieres recordar." },
-  { number: "02", icon: Sparkles, title: "Hazlo parte de tu historia", body: "Califica, etiqueta sabores y guarda los detalles que hicieron especial la experiencia." },
-  { number: "03", icon: UsersRound, title: "Compártelo", body: "Invita a tu mesa, recomienda lo mejor y descubre qué están disfrutando tus amigos." },
-];
+const stepIcons = [
+  { key: "try", number: "01", icon: Camera },
+  { key: "story", number: "02", icon: Sparkles },
+  { key: "share", number: "03", icon: UsersRound },
+] as const;
 
-const betaBenefits = ["Acceso anticipado a nuevas funciones", "Ayuda a definir el futuro de CATA", "Feedback directo desde TestFlight"];
+export function homeMetadata(locale: Locale): Metadata {
+  const { meta } = getDictionary(locale);
+  const url = localizePath("/", locale);
+  return {
+    title: meta.homeTitle,
+    description: meta.homeDescription,
+    alternates: pageAlternates("/", locale),
+    openGraph: {
+      title: meta.homeTitle,
+      description: meta.homeShareDescription,
+      url,
+      siteName: "CATA",
+      images: [{ url: "/assets/cata/cata-logo.png", width: 500, height: 500, alt: "CATA Dining Journal" }],
+      locale: meta.ogLocale,
+      type: "website",
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: meta.homeTitle,
+      description: meta.homeShareDescription,
+      images: ["/assets/cata/cata-logo.png"],
+    },
+  };
+}
 
 function AppleMark() {
   return (
@@ -40,7 +53,7 @@ function AppleMark() {
   );
 }
 
-function TestFlightButton({ light = false }: { light?: boolean }) {
+function TestFlightButton({ label, light = false }: { label: string; light?: boolean }) {
   return (
     <a
       href={testFlightUrl}
@@ -51,7 +64,7 @@ function TestFlightButton({ light = false }: { light?: boolean }) {
       }`}
     >
       <AppleMark />
-      Descargar con TestFlight
+      {label}
     </a>
   );
 }
@@ -66,28 +79,9 @@ function SectionHeading({ eyebrow, title, body }: { eyebrow: string; title: stri
   );
 }
 
-export const metadata: Metadata = {
-  title: "CATA — Tu diario gastronómico social",
-  description: "Guarda tus platillos, descubre tu perfil de gustos y comparte la mesa con tus amigos. Descarga la beta de CATA para iPhone.",
-  alternates: { canonical: "/" },
-  openGraph: {
-    title: "CATA — Tu diario gastronómico social",
-    description: "Recuerda lo que comiste, descubre tu gusto y comparte la mesa.",
-    url: "/",
-    siteName: "CATA",
-    images: [{ url: "/assets/cata/cata-logo.png", width: 500, height: 500, alt: "CATA Dining Journal" }],
-    locale: "es_MX",
-    type: "website",
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: "CATA — Tu diario gastronómico social",
-    description: "Recuerda lo que comiste, descubre tu gusto y comparte la mesa.",
-    images: ["/assets/cata/cata-logo.png"],
-  },
-};
+export function HomePage({ locale }: { locale: Locale }) {
+  const { home, common } = getDictionary(locale);
 
-export default function HomePage() {
   return (
     <main className="relative isolate flex-1 overflow-hidden">
       <section className="relative">
@@ -98,22 +92,20 @@ export default function HomePage() {
           <div className="text-center md:text-left">
             <div className="inline-flex items-center gap-2 rounded-full border border-accent/20 bg-accent/8 px-4 py-2 text-xs font-bold uppercase tracking-[0.18em] text-accent">
               <span className="h-2 w-2 rounded-full bg-accent" />
-              Beta abierta para iPhone
+              {home.badge}
             </div>
             <h1 className="mt-7 max-w-3xl text-5xl font-semibold leading-[1.02] tracking-tight md:text-7xl">
-              Tu diario gastronómico, <span className="italic text-accent">compartido.</span>
+              {home.heroTitle} <span className="italic text-accent">{home.heroHighlight}</span>
             </h1>
-            <p className="mx-auto mt-6 max-w-xl text-base leading-7 text-muted-foreground md:mx-0 md:text-lg">
-              Guarda los platillos que amas, descubre qué define tu gusto y comparte la mesa con las personas que hacen memorable cada comida.
-            </p>
+            <p className="mx-auto mt-6 max-w-xl text-base leading-7 text-muted-foreground md:mx-0 md:text-lg">{home.heroBody}</p>
 
             <div className="mt-9 flex flex-col items-center gap-4 sm:flex-row md:items-start">
-              <TestFlightButton />
+              <TestFlightButton label={home.testFlightCta} />
               <a href="#como-funciona" className="inline-flex min-h-14 items-center gap-2 px-4 text-sm font-semibold text-foreground transition hover:text-accent">
-                Ver cómo funciona <ChevronDown className="h-4 w-4" />
+                {home.howItWorksLink} <ChevronDown className="h-4 w-4" />
               </a>
             </div>
-            <p className="mt-4 text-xs text-muted-foreground">Disponible para iPhone · Cupos limitados · Beta gratuita</p>
+            <p className="mt-4 text-xs text-muted-foreground">{home.availability}</p>
           </div>
 
           <CataScreensShowcase />
@@ -121,34 +113,30 @@ export default function HomePage() {
       </section>
 
       <section className="border-y border-border/70 bg-card px-6 py-20 md:py-28">
-        <SectionHeading
-          eyebrow="Todo lo que pruebas, en un solo lugar"
-          title="Más que una lista de restaurantes"
-          body="CATA conecta tus recuerdos, tus gustos y tu mesa para que cada salida deje algo más que la cuenta."
-        />
+        <SectionHeading eyebrow={home.benefitsEyebrow} title={home.benefitsTitle} body={home.benefitsBody} />
         <div className="mx-auto mt-12 grid max-w-6xl gap-5 md:grid-cols-3">
-          {benefits.map(({ icon: Icon, title, body }) => (
-            <article key={title} className="rounded-3xl border border-border bg-background p-7 transition hover:-translate-y-1 hover:shadow-[0_18px_50px_rgba(56,39,25,.1)]">
+          {benefitIcons.map(({ key, icon: Icon }) => (
+            <article key={key} className="rounded-3xl border border-border bg-background p-7 transition hover:-translate-y-1 hover:shadow-[0_18px_50px_rgba(56,39,25,.1)]">
               <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-accent/10 text-accent"><Icon className="h-6 w-6" /></div>
-              <h3 className="mt-6 text-2xl font-semibold">{title}</h3>
-              <p className="mt-3 text-sm leading-6 text-muted-foreground">{body}</p>
+              <h3 className="mt-6 text-2xl font-semibold">{home.benefits[key].title}</h3>
+              <p className="mt-3 text-sm leading-6 text-muted-foreground">{home.benefits[key].body}</p>
             </article>
           ))}
         </div>
       </section>
 
       <section id="como-funciona" className="px-6 py-20 md:py-28">
-        <SectionHeading eyebrow="Una comida. Tres pasos." title="Así empieza tu historia en CATA" />
+        <SectionHeading eyebrow={home.stepsEyebrow} title={home.stepsTitle} />
         <div className="mx-auto mt-14 grid max-w-5xl gap-10 md:grid-cols-3 md:gap-8">
-          {steps.map(({ number, icon: Icon, title, body }, index) => (
+          {stepIcons.map(({ key, number, icon: Icon }, index) => (
             <article key={number} className="relative text-center">
-              {index < steps.length - 1 && <div aria-hidden="true" className="absolute left-[62%] top-8 hidden h-px w-[76%] bg-border-2 md:block" />}
+              {index < stepIcons.length - 1 && <div aria-hidden="true" className="absolute left-[62%] top-8 hidden h-px w-[76%] bg-border-2 md:block" />}
               <div className="relative mx-auto flex h-16 w-16 items-center justify-center rounded-full border border-border-2 bg-card text-accent shadow-sm">
                 <Icon className="h-6 w-6" />
                 <span className="absolute -right-2 -top-2 rounded-full bg-foreground px-2 py-1 text-[9px] font-bold text-background">{number}</span>
               </div>
-              <h3 className="mt-6 text-2xl font-semibold">{title}</h3>
-              <p className="mx-auto mt-3 max-w-xs text-sm leading-6 text-muted-foreground">{body}</p>
+              <h3 className="mt-6 text-2xl font-semibold">{home.steps[key].title}</h3>
+              <p className="mx-auto mt-3 max-w-xs text-sm leading-6 text-muted-foreground">{home.steps[key].body}</p>
             </article>
           ))}
         </div>
@@ -157,27 +145,25 @@ export default function HomePage() {
       <section className="bg-foreground px-6 py-20 text-background md:py-28">
         <div className="mx-auto grid max-w-6xl items-center gap-14 md:grid-cols-[1fr_.8fr] md:gap-20">
           <div>
-            <p className="font-hand text-2xl font-semibold text-brand-gold">Llévate CATA a tu próxima mesa</p>
-            <h2 className="mt-3 max-w-2xl text-4xl font-semibold leading-tight md:text-6xl">Prueba la beta y ayúdanos a servir algo extraordinario.</h2>
-            <p className="mt-6 max-w-xl leading-7 text-background/65">
-              Estamos construyendo CATA con personas que disfrutan descubrir, recordar y compartir lo que comen. Tu experiencia puede definir lo que sigue.
-            </p>
+            <p className="font-hand text-2xl font-semibold text-brand-gold">{home.betaEyebrow}</p>
+            <h2 className="mt-3 max-w-2xl text-4xl font-semibold leading-tight md:text-6xl">{home.betaTitle}</h2>
+            <p className="mt-6 max-w-xl leading-7 text-background/65">{home.betaBody}</p>
             <ul className="mt-8 space-y-3">
-              {betaBenefits.map((item) => (
+              {home.betaBenefits.map((item) => (
                 <li key={item} className="flex items-center gap-3 text-sm text-background/85">
                   <span className="flex h-6 w-6 items-center justify-center rounded-full bg-brand-gold text-xs font-bold text-foreground">✓</span>{item}
                 </li>
               ))}
             </ul>
-            <div className="mt-9"><TestFlightButton light /></div>
+            <div className="mt-9"><TestFlightButton label={home.testFlightCta} light /></div>
           </div>
 
           <div className="mx-auto hidden w-full max-w-sm rounded-[2rem] border border-white/15 bg-white/8 p-8 text-center backdrop-blur md:block">
             <div className="mx-auto w-fit rounded-3xl bg-white p-4">
-              <Image src="/assets/cata/testflight-qr.png" alt="Código QR para descargar la beta de CATA en TestFlight" width={220} height={220} className="h-52 w-52" />
+              <Image src="/assets/cata/testflight-qr.png" alt={home.qrAlt} width={220} height={220} className="h-52 w-52" />
             </div>
-            <h3 className="mt-6 text-2xl font-semibold">Escanea con tu iPhone</h3>
-            <p className="mt-2 text-sm leading-6 text-background/60">Abre la cámara, apunta al código y únete a la beta en TestFlight.</p>
+            <h3 className="mt-6 text-2xl font-semibold">{home.qrTitle}</h3>
+            <p className="mt-2 text-sm leading-6 text-background/60">{home.qrBody}</p>
           </div>
         </div>
       </section>
@@ -189,9 +175,9 @@ export default function HomePage() {
             <p className="text-sm text-muted-foreground">CATA · Dining Journal</p>
           </div>
           <div className="flex gap-6 text-sm">
-            <Link href="/privacy" className="text-muted-foreground transition hover:text-accent">Política de Privacidad</Link>
-            <Link href="/terms" className="text-muted-foreground transition hover:text-accent">Términos de Servicio</Link>
-            <Link href="/support" className="text-muted-foreground transition hover:text-accent">Soporte</Link>
+            <Link href={localizePath("/privacy", locale)} className="text-muted-foreground transition hover:text-accent">{common.privacy}</Link>
+            <Link href={localizePath("/terms", locale)} className="text-muted-foreground transition hover:text-accent">{common.terms}</Link>
+            <Link href={localizePath("/support", locale)} className="text-muted-foreground transition hover:text-accent">{common.support}</Link>
           </div>
         </div>
       </footer>

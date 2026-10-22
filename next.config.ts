@@ -7,6 +7,11 @@ const nextConfig: NextConfig = {
     unoptimized: true,
   },
   trailingSlash: true,
+  experimental: {
+    // Each language has its own root layout, so unmatched URLs need a
+    // standalone 404 page (app/global-not-found.tsx).
+    globalNotFound: true,
+  },
 };
 
 export default nextConfig;
