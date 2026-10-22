@@ -4,33 +4,25 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 import { AnimatePresence, motion } from "framer-motion";
 
-const screens = [
-  "WhatsApp Image 2026-07-20 at 11.41.32 PM (1).jpeg",
-  "WhatsApp Image 2026-07-20 at 11.41.32 PM (4).jpeg",
-  "WhatsApp Image 2026-07-20 at 11.41.32 PM.jpeg",
-  "WhatsApp Image 2026-07-20 at 11.53.57 PM (3).jpeg",
-  "WhatsApp Image 2026-07-20 at 11.53.57 PM (5).jpeg",
-  "WhatsApp Image 2026-07-20 at 11.53.57 PM (6).jpeg",
-  "WhatsApp Image 2026-07-20 at 11.53.57 PM (8).jpeg",
-  "WhatsApp Image 2026-07-20 at 11.53.58 PM (7).jpeg",
-  "WhatsApp Image 2026-07-21 at 1.11.18 AM (2).jpeg",
-  "WhatsApp Image 2026-07-21 at 1.28.34 AM (2).jpeg",
-  "WhatsApp Image 2026-07-21 at 1.28.35 AM.jpeg",
-].map((name) => `/assets/screens/${encodeURIComponent(name)}`);
-
-const captions = [
-  ["Descubre tu perfil de gustos", "Convierte cada registro en una visión clara de lo que te encanta."],
-  ["Guarda lo que vale la pena", "Crea un diario visual de platillos, bebidas y lugares."],
-  ["Recuerda cada experiencia", "Fotos, notas y calificaciones siempre a la mano."],
-  ["Crea y comparte recetas", "Lleva la inspiración de la mesa a tu propia cocina."],
-  ["Explora nuevas ideas", "Encuentra experiencias construidas alrededor de tu gusto."],
-  ["Construye tu historia", "Cada comida se convierte en parte de tu colección."],
-  ["Comparte con tu gente", "Descubre qué están probando las personas en las que confías."],
-  ["Planea tu próxima salida", "Guarda restaurantes, recetas y viajes gastronómicos."],
-  ["Conoce mejor tu paladar", "Tus hábitos se transforman en recomendaciones más personales."],
-  ["Celebra cada hallazgo", "Haz visibles los platillos y lugares que recomendarías."],
-  ["Todo tu mundo gastronómico", "Una sola app para descubrir, guardar y compartir."],
+// Files live in public/assets/screens/. Each entry keeps the image and its caption together.
+const slides = [
+  ["WhatsApp Image 2026-10-21 at 6.09.36 PM.jpeg", "Tu perfil de sabor", "CATA descubre tu estilo: sabores favoritos, insignias e historias de tus comidas."],
+  ["WhatsApp Image 2026-10-21 at 6.48.27 PM.jpeg", "Explora a tu alrededor", "Busca platillos, restaurantes y personas, y encuentra lugares cerca de ti según tu gusto."],
+  ["WhatsApp Image 2026-07-21 at 1.11.18 AM (2).jpeg", "¿No sabes dónde comer?", "Elige un tipo de cocina y deja que CATA sortee un lugar cerca de ti."],
+  ["WhatsApp Image 2026-07-21 at 1.28.35 AM.jpeg", "Conoce cada restaurante", "Fotos, calificaciones y dirección. Guárdalo, márcalo como visitado o súmalo a tu viaje."],
+  ["WhatsApp Image 2026-10-21 at 6.51.51 PM.jpeg", "Registra cada platillo", "Agrega foto, fecha, restaurante y con quién lo compartiste."],
+  ["WhatsApp Image 2026-10-21 at 6.51.51 PM (1).jpeg", "Califica lo que probaste", "Marca ingredientes, sabores y aromas con una intensidad del 1 al 5."],
+  ["WhatsApp Image 2026-10-21 at 6.51.51 PM (2).jpeg", "Revisa y publica", "Confirma tu reseña y elige quién puede verla."],
+  ["WhatsApp Image 2026-10-21 at 1.02.08 PM.jpeg", "Tu radar de sabor", "Descubre qué intensidades dominan tu paladar: mantecoso, cálido, dulce y más."],
+  ["WhatsApp Image 2026-07-20 at 11.53.57 PM (8).jpeg", "Tu diario gastronómico", "Guarda cada viaje como una colección: Italia, Ciudad de México, Copenhague y más."],
+  ["WhatsApp Image 2026-07-20 at 11.53.57 PM (6).jpeg", "Planea tu ruta", "Ve tus paradas en orden sobre el mapa, con un botón para llegar a cada una."],
+  ["WhatsApp Image 2026-07-20 at 11.53.57 PM (5).jpeg", "Agrega paradas a tu viaje", "Restaurante, platillo, fecha, calificación y notas de cada parada."],
+  ["WhatsApp Image 2026-07-20 at 11.41.32 PM (4).jpeg", "Listas para descubrir", "Guarda listas curadas, solicita unirte y compártelas con tus amigos."],
+  ["WhatsApp Image 2026-07-20 at 11.53.57 PM (3).jpeg", "Crea tus propias recetas", "Importa desde un enlace, foto o texto, con ingredientes y pasos."],
 ];
+
+const screens = slides.map(([name]) => `/assets/screens/${encodeURIComponent(name)}`);
+const captions = slides.map(([, title, text]) => [title, text]);
 
 export function CataScreensShowcase() {
   const [index, setIndex] = useState(0);
