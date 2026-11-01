@@ -248,7 +248,7 @@ const es = {
     siteDescription: "CATA — el diario gastronómico social de MONARKA TECH.",
     homeTitle: "CATA — Tu diario gastronómico social",
     homeDescription:
-      "Guarda tus platillos, descubre tu perfil de gustos y comparte la mesa con tus amigos. Descarga la beta de CATA para iPhone.",
+      "Guarda tus platillos, descubre tu perfil de gustos y comparte la mesa con tus amigos. Descarga CATA gratis en el App Store.",
     homeShareDescription: "Recuerda lo que comiste, descubre tu gusto y comparte la mesa.",
     ogLocale: "es_MX",
   },
@@ -274,14 +274,14 @@ const es = {
     languageLabel: "Idioma",
   },
   home: {
-    badge: "Beta abierta para iPhone",
+    badge: "Ya disponible en el App Store",
     heroTitle: "Tu diario gastronómico,",
     heroHighlight: "compartido.",
     heroBody:
       "Guarda los platillos que amas, descubre qué define tu gusto y comparte la mesa con las personas que hacen memorable cada comida.",
-    testFlightCta: "Descargar con TestFlight",
+    appStoreCta: "Descargar en el App Store",
     howItWorksLink: "Ver cómo funciona",
-    availability: "Disponible para iPhone · Cupos limitados · Beta gratuita",
+    availability: "Gratis · Disponible para iPhone",
     benefitsEyebrow: "Todo lo que pruebas, en un solo lugar",
     benefitsTitle: "Más que una lista de restaurantes",
     benefitsBody: "CATA conecta tus recuerdos, tus gustos y tu mesa para que cada salida deje algo más que la cuenta.",
@@ -312,14 +312,14 @@ const es = {
         body: "Invita a tu mesa, recomienda lo mejor y descubre qué están disfrutando tus amigos.",
       },
     },
-    betaEyebrow: "Llévate CATA a tu próxima mesa",
-    betaTitle: "Prueba la beta y ayúdanos a servir algo extraordinario.",
-    betaBody:
-      "Estamos construyendo CATA con personas que disfrutan descubrir, recordar y compartir lo que comen. Tu experiencia puede definir lo que sigue.",
-    betaBenefits: ["Acceso anticipado a nuevas funciones", "Ayuda a definir el futuro de CATA", "Feedback directo desde TestFlight"],
-    qrAlt: "Código QR para descargar la beta de CATA en TestFlight",
+    downloadEyebrow: "Llévate CATA a tu próxima mesa",
+    downloadTitle: "Descarga CATA y haz de cada comida un recuerdo.",
+    downloadBody:
+      "CATA ya está en el App Store. Guarda tus platillos, descubre tu gusto y comparte la mesa con tus amigos desde hoy.",
+    downloadBenefits: ["Gratis en el App Store", "Tu diario, tu perfil de gustos y tu mesa en una sola app", "Nuevas funciones en cada actualización"],
+    qrAlt: "Código QR para descargar CATA en el App Store",
     qrTitle: "Escanea con tu iPhone",
-    qrBody: "Abre la cámara, apunta al código y únete a la beta en TestFlight.",
+    qrBody: "Abre la cámara, apunta al código y descarga CATA en el App Store.",
   },
   showcase: {
     imageAlt: "Captura de la app CATA",
@@ -338,7 +338,7 @@ const es = {
       },
       {
         question: "¿Cómo sugiero una función nueva?",
-        answer: `Nos encanta escuchar ideas. Mándanos tu sugerencia a ${SUPPORT_EMAIL} — muchas de las funciones de CATA nacieron de feedback de usuarios en TestFlight.`,
+        answer: `Nos encanta escuchar ideas. Mándanos tu sugerencia a ${SUPPORT_EMAIL} — muchas de las funciones de CATA nacieron de ideas de nuestros usuarios.`,
       },
       {
         question: "¿Cómo elimino mi cuenta y mis datos?",
@@ -348,12 +348,12 @@ const es = {
       {
         question: "¿CATA tiene algún costo?",
         answer:
-          "No. CATA es gratis y actualmente está disponible como beta pública a través de TestFlight mientras seguimos puliendo la experiencia antes del lanzamiento oficial.",
+          "No. CATA es gratis y puedes descargarla en el App Store.",
       },
       {
-        question: "¿Cómo accedo a la beta en TestFlight?",
+        question: "¿Dónde descargo CATA?",
         answer:
-          "Descarga la app TestFlight de Apple y usa el enlace de invitación en la página principal de cata.life. Si el cupo está lleno, escríbenos y te avisamos cuando se abran más lugares.",
+          "CATA está disponible gratis para iPhone en el App Store. Busca “CATA Food Journal” o usa el botón de descarga en la página principal de cata.life.",
       },
       {
         question: "¿Dónde veo qué información recopila CATA?",
@@ -431,7 +431,7 @@ const es = {
     openAppNote:
       "Abre CATA para dividir la cuenta, ordenar y participar con el grupo. Esas funciones están disponibles únicamente dentro de la app.",
     downloadAndroid: "Descargar para Android",
-    iphoneSoon: "Versión para iPhone: próximamente en App Store.",
+    downloadIphone: "Descargar para iPhone",
     invitedEyebrow: "Te invitaron a compartir la mesa",
     nameLabel: "¿Cómo te llamas?",
     namePlaceholder: "Tu nombre",

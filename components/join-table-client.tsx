@@ -9,8 +9,7 @@ import {
   loadDiningGroup,
 } from "@/lib/dining-groups";
 import { useI18n } from "@/components/locale-provider";
-
-const playStoreUrl = "https://play.google.com/store/apps/details?id=com.cata.app";
+import { siteConfig } from "@/lib/site";
 
 type ViewState =
   | { name: "loading" }
@@ -149,10 +148,14 @@ export function JoinTableClient() {
         <div className="mt-8 rounded-2xl bg-secondary p-5 text-sm leading-6 text-muted-foreground">
           {copy.openAppNote}
         </div>
-        <a href={playStoreUrl} target="_blank" rel="noopener noreferrer" className="mt-7 inline-flex min-h-12 items-center rounded-full bg-foreground px-6 font-semibold text-background transition hover:bg-accent">
-          {copy.downloadAndroid}
-        </a>
-        <p className="mt-4 text-sm text-muted-foreground">{copy.iphoneSoon}</p>
+        <div className="mt-7 flex flex-col items-center justify-center gap-3 sm:flex-row">
+          <a href={siteConfig.appStoreUrl} target="_blank" rel="noopener noreferrer" className="inline-flex min-h-12 items-center rounded-full bg-foreground px-6 font-semibold text-background transition hover:bg-accent">
+            {copy.downloadIphone}
+          </a>
+          <a href={siteConfig.playStoreUrl} target="_blank" rel="noopener noreferrer" className="inline-flex min-h-12 items-center rounded-full border border-border-2 px-6 font-semibold text-foreground transition hover:bg-secondary">
+            {copy.downloadAndroid}
+          </a>
+        </div>
       </div>
     );
   }

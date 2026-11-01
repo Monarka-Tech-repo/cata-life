@@ -5,8 +5,7 @@ import { BookHeart, ChartNoAxesCombined, ChevronDown, Camera, Sparkles, UsersRou
 import { CataScreensShowcase } from "@/components/cata-screens-showcase";
 import { localizePath, type Locale } from "@/lib/i18n/config";
 import { getDictionary, pageAlternates } from "@/lib/i18n";
-
-const testFlightUrl = "https://testflight.apple.com/join/wpZP6h12";
+import { siteConfig } from "@/lib/site";
 
 const benefitIcons = [
   { key: "diary", icon: BookHeart },
@@ -53,10 +52,10 @@ function AppleMark() {
   );
 }
 
-function TestFlightButton({ label, light = false }: { label: string; light?: boolean }) {
+function AppStoreButton({ label, light = false }: { label: string; light?: boolean }) {
   return (
     <a
-      href={testFlightUrl}
+      href={siteConfig.appStoreUrl}
       target="_blank"
       rel="noopener noreferrer"
       className={`inline-flex min-h-14 items-center justify-center gap-3 rounded-full px-7 text-base font-semibold shadow-[0_16px_38px_rgba(26,26,24,.18)] transition hover:-translate-y-0.5 focus-visible:outline-2 focus-visible:outline-offset-4 ${
@@ -100,7 +99,7 @@ export function HomePage({ locale }: { locale: Locale }) {
             <p className="mx-auto mt-6 max-w-xl text-base leading-7 text-muted-foreground md:mx-0 md:text-lg">{home.heroBody}</p>
 
             <div className="mt-9 flex flex-col items-center gap-4 sm:flex-row md:items-start">
-              <TestFlightButton label={home.testFlightCta} />
+              <AppStoreButton label={home.appStoreCta} />
               <a href="#como-funciona" className="inline-flex min-h-14 items-center gap-2 px-4 text-sm font-semibold text-foreground transition hover:text-accent">
                 {home.howItWorksLink} <ChevronDown className="h-4 w-4" />
               </a>
@@ -145,22 +144,22 @@ export function HomePage({ locale }: { locale: Locale }) {
       <section className="bg-foreground px-6 py-20 text-background md:py-28">
         <div className="mx-auto grid max-w-6xl items-center gap-14 md:grid-cols-[1fr_.8fr] md:gap-20">
           <div>
-            <p className="font-hand text-2xl font-semibold text-brand-gold">{home.betaEyebrow}</p>
-            <h2 className="mt-3 max-w-2xl text-4xl font-semibold leading-tight md:text-6xl">{home.betaTitle}</h2>
-            <p className="mt-6 max-w-xl leading-7 text-background/65">{home.betaBody}</p>
+            <p className="font-hand text-2xl font-semibold text-brand-gold">{home.downloadEyebrow}</p>
+            <h2 className="mt-3 max-w-2xl text-4xl font-semibold leading-tight md:text-6xl">{home.downloadTitle}</h2>
+            <p className="mt-6 max-w-xl leading-7 text-background/65">{home.downloadBody}</p>
             <ul className="mt-8 space-y-3">
-              {home.betaBenefits.map((item) => (
+              {home.downloadBenefits.map((item) => (
                 <li key={item} className="flex items-center gap-3 text-sm text-background/85">
                   <span className="flex h-6 w-6 items-center justify-center rounded-full bg-brand-gold text-xs font-bold text-foreground">✓</span>{item}
                 </li>
               ))}
             </ul>
-            <div className="mt-9"><TestFlightButton label={home.testFlightCta} light /></div>
+            <div className="mt-9"><AppStoreButton label={home.appStoreCta} light /></div>
           </div>
 
           <div className="mx-auto hidden w-full max-w-sm rounded-[2rem] border border-white/15 bg-white/8 p-8 text-center backdrop-blur md:block">
             <div className="mx-auto w-fit rounded-3xl bg-white p-4">
-              <Image src="/assets/cata/testflight-qr.png" alt={home.qrAlt} width={220} height={220} className="h-52 w-52" />
+              <Image src="/assets/cata/app-store-qr.png" alt={home.qrAlt} width={220} height={220} className="h-52 w-52" />
             </div>
             <h3 className="mt-6 text-2xl font-semibold">{home.qrTitle}</h3>
             <p className="mt-2 text-sm leading-6 text-background/60">{home.qrBody}</p>

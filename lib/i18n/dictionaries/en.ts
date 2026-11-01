@@ -249,7 +249,7 @@ const en: Dictionary = {
     siteDescription: "CATA — the social food journal by MONARKA TECH.",
     homeTitle: "CATA — Your social food journal",
     homeDescription:
-      "Save your dishes, discover your taste profile and share the table with your friends. Download the CATA beta for iPhone.",
+      "Save your dishes, discover your taste profile and share the table with your friends. Download CATA for free on the App Store.",
     homeShareDescription: "Remember what you ate, discover your taste and share the table.",
     ogLocale: "en_US",
   },
@@ -275,14 +275,14 @@ const en: Dictionary = {
     languageLabel: "Language",
   },
   home: {
-    badge: "Open beta for iPhone",
+    badge: "Now on the App Store",
     heroTitle: "Your food journal,",
     heroHighlight: "shared.",
     heroBody:
       "Save the dishes you love, discover what defines your taste and share the table with the people who make every meal memorable.",
-    testFlightCta: "Download on TestFlight",
+    appStoreCta: "Download on the App Store",
     howItWorksLink: "See how it works",
-    availability: "Available for iPhone · Limited spots · Free beta",
+    availability: "Free · Available for iPhone",
     benefitsEyebrow: "Everything you taste, in one place",
     benefitsTitle: "More than a list of restaurants",
     benefitsBody: "CATA connects your memories, your taste and your table so every outing leaves you with more than the check.",
@@ -313,14 +313,14 @@ const en: Dictionary = {
         body: "Invite friends to your table, recommend the best and see what your friends are enjoying.",
       },
     },
-    betaEyebrow: "Bring CATA to your next table",
-    betaTitle: "Try the beta and help us serve something extraordinary.",
-    betaBody:
-      "We're building CATA with people who love discovering, remembering and sharing what they eat. Your experience can shape what comes next.",
-    betaBenefits: ["Early access to new features", "Help shape the future of CATA", "Direct feedback through TestFlight"],
-    qrAlt: "QR code to download the CATA beta on TestFlight",
+    downloadEyebrow: "Bring CATA to your next table",
+    downloadTitle: "Download CATA and make every meal a memory.",
+    downloadBody:
+      "CATA is now on the App Store. Save your dishes, discover your taste and share the table with your friends starting today.",
+    downloadBenefits: ["Free on the App Store", "Your journal, your taste profile and your table in one app", "New features with every update"],
+    qrAlt: "QR code to download CATA on the App Store",
     qrTitle: "Scan with your iPhone",
-    qrBody: "Open the camera, point it at the code and join the beta on TestFlight.",
+    qrBody: "Open the camera, point it at the code and download CATA on the App Store.",
   },
   showcase: {
     imageAlt: "Screenshot of the CATA app",
@@ -339,7 +339,7 @@ const en: Dictionary = {
       },
       {
         question: "How do I suggest a new feature?",
-        answer: `We love hearing ideas. Send your suggestion to ${SUPPORT_EMAIL} — many of CATA's features came from TestFlight user feedback.`,
+        answer: `We love hearing ideas. Send your suggestion to ${SUPPORT_EMAIL} — many of CATA's features came from our users' ideas.`,
       },
       {
         question: "How do I delete my account and my data?",
@@ -349,12 +349,12 @@ const en: Dictionary = {
       {
         question: "Does CATA cost anything?",
         answer:
-          "No. CATA is free and is currently available as a public beta through TestFlight while we keep polishing the experience before the official launch.",
+          "No. CATA is free to download on the App Store.",
       },
       {
-        question: "How do I get into the TestFlight beta?",
+        question: "Where can I download CATA?",
         answer:
-          "Download Apple's TestFlight app and use the invitation link on the cata.life home page. If the beta is full, email us and we'll let you know when more spots open up.",
+          "CATA is available for free on the App Store for iPhone. Search for “CATA Food Journal” or use the download button on the cata.life home page.",
       },
       {
         question: "Where can I see what information CATA collects?",
@@ -431,7 +431,7 @@ const en: Dictionary = {
     openAppNote:
       "Open CATA to split the check, order and join in with the group. Those features are only available in the app.",
     downloadAndroid: "Download for Android",
-    iphoneSoon: "iPhone version: coming soon to the App Store.",
+    downloadIphone: "Download for iPhone",
     invitedEyebrow: "You've been invited to share the table",
     nameLabel: "What's your name?",
     namePlaceholder: "Your name",
