@@ -1,0 +1,9 @@
+# App deep links (see CATA_App/src/navigation/linking.js). When the app doesn't
+# intercept the link (not installed, desktop, some in-app browsers), serve the
+# "open in CATA" landing page instead of a 404. 200 = rewrite, URL unchanged.
+/u/*        /open/      200
+/dish/*     /open/      200
+/trip/*     /open/      200
+/en/u/*     /en/open/   200
+/en/dish/*  /en/open/   200
+/en/trip/*  /en/open/   200

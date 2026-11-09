@@ -11,6 +11,18 @@
           {
             "/": "/join-table/",
             "comment": "Canonical trailing-slash form of a CATA dining-table invitation."
+          },
+          {
+            "/": "/u/*",
+            "comment": "Shared taste profile (UserProfile screen)."
+          },
+          {
+            "/": "/dish/*",
+            "comment": "Shared dish (DishDetail screen)."
+          },
+          {
+            "/": "/trip/*",
+            "comment": "Shared food trip (FoodJourneyList screen)."
           }
         ]
       }

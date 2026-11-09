@@ -9,6 +9,7 @@ import { TasteProfileClient } from "@/components/taste-profile-client";
 import { PlannerClient } from "@/components/planner-client";
 import { CommunityClient } from "@/components/community-client";
 import { JoinTableClient } from "@/components/join-table-client";
+import { OpenInAppClient } from "@/components/open-in-app-client";
 import { localizePath, type Locale } from "@/lib/i18n/config";
 import { getDictionary, pageAlternates } from "@/lib/i18n";
 
@@ -37,6 +38,24 @@ export function joinTableMetadata(locale: Locale): Metadata {
     description: joinTable.metaDescription,
     alternates: pageAlternates("/join-table", locale),
     robots: noIndex,
+  };
+}
+
+// Served (via public/_redirects) for /u/*, /dish/* and /trip/*, so these OG
+// tags are what WhatsApp & co. show when a CATA share link is pasted.
+export function openInAppMetadata(locale: Locale): Metadata {
+  const { openInApp } = getDictionary(locale);
+  return {
+    title: openInApp.metaTitle,
+    description: openInApp.metaDescription,
+    robots: noIndex,
+    openGraph: {
+      title: openInApp.metaTitle,
+      description: openInApp.metaDescription,
+      siteName: "CATA",
+      images: [{ url: "/assets/cata/cata-logo.png", width: 500, height: 500, alt: "CATA" }],
+      type: "website",
+    },
   };
 }
 
@@ -111,6 +130,20 @@ export function CommunityPage({ locale }: { locale: Locale }) {
     <ToolPage title={community.title} subtitle={community.subtitle}>
       <CommunityClient />
     </ToolPage>
+  );
+}
+
+export function OpenInAppPage({ locale }: { locale: Locale }) {
+  return (
+    <main className="relative isolate flex min-h-screen items-center overflow-hidden px-6 py-12">
+      <Glow />
+      <div className="mx-auto w-full max-w-lg">
+        <LogoLink locale={locale} />
+        <section className="rounded-[2rem] border border-border bg-card p-7 shadow-[0_30px_80px_rgba(56,39,25,.14)] sm:p-10">
+          <OpenInAppClient />
+        </section>
+      </div>
+    </main>
   );
 }
 

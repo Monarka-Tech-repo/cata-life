@@ -411,6 +411,23 @@ const en: Dictionary = {
       "auth/too-many-requests": "Too many attempts. Please try again in a few minutes.",
     },
   },
+  openInApp: {
+    metaTitle: "Open in CATA",
+    metaDescription: "Someone shared this with you from CATA, the dining journal. Open it in the app.",
+    eyebrow: "Shared from CATA",
+    titles: {
+      profile: "A taste profile is waiting for you",
+      dish: "Someone shared a dish with you",
+      trip: "Someone shared a food trip with you",
+      generic: "This opens in the CATA app",
+    },
+    body: "This lives inside the app. If you already have CATA, open it directly — otherwise download it for free.",
+    open: "Open in CATA",
+    notInstalled: "Didn't open? Download the app, then tap the link again.",
+    downloadIphone: "Download for iPhone",
+    downloadAndroid: "Download for Android",
+    goToCata: "Discover CATA",
+  },
   joinTable: {
     metaTitle: "Join the table",
     metaDescription: "Accept an invitation and join a shared table on CATA.",

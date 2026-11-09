@@ -411,6 +411,23 @@ const es = {
       "auth/too-many-requests": "Demasiados intentos. Intenta de nuevo en unos minutos.",
     } as Record<string, string>,
   },
+  openInApp: {
+    metaTitle: "Ábrelo en CATA",
+    metaDescription: "Alguien compartió esto contigo desde CATA, el diario gastronómico. Ábrelo en la app.",
+    eyebrow: "Compartido desde CATA",
+    titles: {
+      profile: "Un perfil de sabor te espera",
+      dish: "Te compartieron un platillo",
+      trip: "Te compartieron un viaje gastronómico",
+      generic: "Esto se ve en la app CATA",
+    },
+    body: "Este contenido vive dentro de la app. Si ya tienes CATA, ábrelo directamente; si no, descárgala gratis.",
+    open: "Abrir en CATA",
+    notInstalled: "¿No se abrió? Descarga la app y vuelve a tocar el enlace.",
+    downloadIphone: "Descargar para iPhone",
+    downloadAndroid: "Descargar para Android",
+    goToCata: "Conoce CATA",
+  },
   joinTable: {
     metaTitle: "Únete a la mesa",
     metaDescription: "Acepta una invitación y únete a una mesa compartida en CATA.",
